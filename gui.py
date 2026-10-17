@@ -152,8 +152,8 @@ class App:
             label.pack(side='left')
             tk.Label(label, text=title, bg=token('color.background.surfaceMuted'), fg=token('color.text.secondary'), font=font('body')).pack(anchor='w')
             tk.Label(label, textvariable=self.stock_values[key], bg=token('color.background.surfaceMuted'), fg=token('color.text.primary'), font=font('body'), wraplength=100).pack(anchor='w')
-        self.currency_images={key:asset(root,'currency_'+key).subsample(2) for key in ('coins','gold')}
-        self.ticket_images={key:asset(root,'ticket_'+key).subsample(2) for key in ('ca_ro','ca_map','ca_noc','dock')}
+        self.currency_images={key:asset(root,'currency_'+key) for key in ('coins','gold')}
+        self.ticket_images={key:asset(root,'ticket_'+key) for key in ('ca_ro','ca_map','ca_noc','dock')}
         self.wallet_values = {key: tk.StringVar(value='Chưa xác định') for key in ('coins', 'gold')}
         for index,(key, label) in enumerate([('coins', 'Xu'), ('gold', 'Lượng')]):
             line = ttk.Frame(top, style='Card.TFrame',padding=(6,4))
@@ -692,7 +692,7 @@ class App:
             seconds = int(time.monotonic() - self.timer_started)
             self.set_changed(self.elapsed, f'{seconds // 3600:02d}:{seconds // 60 % 60:02d}:{seconds % 60:02d}')
         pending_progress, logs = None, []
-        deadline = time.monotonic() + .008
+        pending_errors = getattr(self, '_pending_errors', [])
         for _ in range(200):
             try:
                 kind, data = self.messages.get_nowait()
@@ -726,8 +726,7 @@ class App:
                 self.close_preparation()
                 self.append(data)
                 if kind == 'error':
-                    self.root.bell()
-                    messagebox.showerror('Avatar Fishing Bot', data)
+                    pending_errors.append(data)
                 else:
                     self.notify_completion(data)
             elif kind == 'done':
@@ -756,11 +755,16 @@ class App:
                 self.options_changed()
                 self.status.set({'ERROR': 'Đã dừng do lỗi • Kiểm tra nhật ký hoạt động',
                                  'COMPLETE': 'Hoàn thành nhiệm vụ', 'STOPPED': 'Đã kết thúc'}.get(data, data))
-            if time.monotonic() >= deadline:
-                break
         if pending_progress is not None:
             self.render_snapshot(pending_progress)
         self.append_many(logs)
+        self._pending_errors = pending_errors
+        # Drain terminal progress/done first. Modal error dialogs must not hold
+        # the finished worker guard or its disabled controls until dismissed.
+        if self.messages.empty() and pending_errors:
+            self._pending_errors = []
+            self.root.bell()
+            messagebox.showerror('Avatar Fishing Bot', '\n\n'.join(pending_errors))
         self.poll_job = self.root.after(15 if not self.messages.empty() else 75, self.poll)
 
     @staticmethod
@@ -900,7 +904,7 @@ if __name__ == '__main__':
         root.destroy()
     else:
         from debug.retention import maybe_prune
-        maybe_prune(ROOT / 'debug', force=True)
+        maybe_prune(ROOT / 'debug')
         App(tk.Tk())
         tk.mainloop()
     lock.close()

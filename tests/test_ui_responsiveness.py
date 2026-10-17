@@ -57,6 +57,29 @@ class ResponsivenessTests(unittest.TestCase):
         self.assertIn('before\n', observed[0][1])
         self.assertEqual(self.app.table.item('cua', 'values')[1], '2')
 
+    def test_slow_completion_still_releases_worker_in_same_batch(self):
+        from unittest.mock import Mock
+        self.app.worker = Mock()
+        self.app.messages.put(('notice', 'complete'))
+        self.app.messages.put(('done', 'COMPLETE'))
+        # A completion widget can exceed the old 8 ms frame budget.
+        with patch('gui.winsound.PlaySound'), patch('gui.time.monotonic', side_effect=[0, .05]):
+            self.app.poll()
+        self.assertIsNone(self.app.worker)
+        self.assertTrue(self.app.completion_popup.winfo_exists())
+        self.assertEqual(self.app.status.get(), 'Hoàn thành nhiệm vụ')
+
+    def test_error_dialog_observes_already_finished_worker_and_enabled_controls(self):
+        from unittest.mock import Mock
+        observed = []
+        self.app.worker = Mock()
+        self.app.messages.put(('error', 'failed'))
+        self.app.messages.put(('done', 'ERROR'))
+        with patch('gui.messagebox.showerror', side_effect=lambda *_: observed.append(
+                (self.app.worker, str(self.app.reset_button['state'])))):
+            self.app.poll()
+        self.assertEqual(observed, [(None, 'normal')])
+
     def test_identical_snapshot_does_not_redraw_rows_or_rewrite_values(self):
         changes = []
         self.app.metric_values['casts'].trace_add('write', lambda *_: changes.append(1))

@@ -111,8 +111,6 @@ class BotWorker:
             lambda retry, limit: self.emit('log', f'[ADB] Chụp màn hình quá thời gian; đang thử lại {retry}/{limit}.'))
         self.folder = ROOT / 'debug/ui' / datetime.now().strftime('%Y-%m-%d_%H-%M-%S_%f')
         self.folder.mkdir(parents=True, exist_ok=True)
-        from debug.retention import maybe_prune
-        maybe_prune(ROOT/'debug', force=True, keep_directories=(self.folder,))
         self.data = {'status': 'NEW', 'counts': {}, 'unsold': {}, 'casts': 0, 'bites': 0,
                      'misses': 0, 'unclassified_results': 0, 'bait_purchased': 0,
                      'bait_remaining': None, 'purchase_pending': False,
@@ -145,6 +143,8 @@ class BotWorker:
         self.travel = TravelController(self.device, self.folder / 'travel', on_event=self.shop_event)
         self.rooms = RoomSwitcher(self.travel)
         self.fishing_presentations = {}
+        self.ready_for_next = None
+        self.wallet_refresh_after = 0.0
         self.inventory_ready = False
         self.cache_serial=getattr(self.device,'serial',settings.serial)
         if not isinstance(self.cache_serial,str):self.cache_serial=settings.serial
@@ -199,7 +199,9 @@ class BotWorker:
 
     def publish(self):
         from debug.retention import maybe_prune
-        maybe_prune(ROOT/'debug')
+        maybe_prune(ROOT/'debug',
+                    protected_paths=(self.folder,) if self.data.get('purchase_pending') else (),
+                    keep_directories=(self.folder,))
         self.data['misses'] = max(0,self.data['casts']-self.data['bites'])
         self.data['bait_stocks']['ecological'] = self.data['bait_remaining']
         if getattr(self,'inventory_cache',None) is not None:
@@ -390,6 +392,22 @@ class BotWorker:
             self.travel.sell_and_buy(sell=True, buy=False)
         self.travel.enter(area)
 
+    def take_ready_handoff(self, area):
+        saved, self.ready_for_next = getattr(self, 'ready_for_next', None), None
+        if saved is not None and saved[0] == area and 0 <= time.monotonic()-saved[1][2] <= .25:
+            return saved[1]
+        return None
+
+    def refresh_wallet_display(self, index):
+        """Unknown display OCR must not delay every cast; purchases read afresh."""
+        unknown = any(self.data['wallet'].get(key) is None for key in ('coins','gold'))
+        if index % 20 and (not unknown or time.monotonic() < self.wallet_refresh_after):
+            return
+        balances = InventoryController(self.device,self.folder/'balances').wallet()
+        self.wallet_refresh_after=time.monotonic()+120
+        for currency,value in balances.items():
+            if value is not None:self.data['wallet'][currency]=value
+
     def preparation_step(self, message):
         self.emit('preparation', message)
         self.emit('log', '[CHUẨN BỊ] ' + message)
@@ -539,16 +557,28 @@ class BotWorker:
                 except SessionLost:
                     self.reconnect();image=self.device.screenshot()
                 detector=FishingDetector(area=self.data.get('area','ca_ro'))
+                navigator=MapNavigator(self.device,output=self.folder/f'restart_{count:02d}')
                 from fishing.states import FishingState
-                state=detector.detect(image).state
+                initial=detector.detect(image)
+                state=initial.state
                 if state in (FishingState.WAITING,FishingState.FISHING):
-                    close=detector.detect(image).matches.get('close')
+                    close=initial.matches.get('close')
                     if close is None:
                         raise RuntimeError('Chưa xác nhận nút Đóng để hủy lượt khi khôi phục')
                     self.travel.tap(close.center,'Đóng lượt để khởi động lại')
-                    self.travel.wait(lambda a:detector.detect(a).state is FishingState.EXIT_CONFIRM,'xác nhận hủy lượt',timeout=10)
-                    self.travel.button('exit_yes','Có: hủy lượt để khôi phục')
-                navigator=MapNavigator(self.device,output=self.folder/f'restart_{count:02d}')
+                    def cancellation_screen(image):
+                        observed=detector.detect(image)
+                        if observed.state is FishingState.EXIT_CONFIRM:return 'confirm'
+                        if observed.state in (FishingState.IDLE,FishingState.READY) and observed.scene_confirmed:
+                            return 'outside'
+                        if observed.state is FishingState.UNKNOWN and (
+                                navigator.is_world(image) or navigator.location(image) is not None
+                                or self.travel.world.map_name(image,require_menu=False) is not None):
+                            return 'outside'
+                        return None
+                    response=self.travel.wait(cancellation_screen,'hủy lượt hoặc map ngoài ghế',timeout=10)
+                    if response=='confirm':
+                        self.travel.button('exit_yes','Có: hủy lượt để khôi phục')
                 # Close unknown overlays via Android Back, inspecting each
                 # resulting frame. Never confirm an exit from the game.
                 for _ in range(3):
@@ -662,14 +692,12 @@ class BotWorker:
                         if area != prepared_area:
                             self.prepare_area(area)
                             prepared_area = area
-                        self.go(area)
+                        ready_handoff=self.take_ready_handoff(area)
+                        if ready_handoff is None:
+                            self.go(area)
                         self.data['area'] = area
                         self.sell_before_midnight(area)
                         index += 1
-                        if index % 20 == 0 or self.data['wallet']['coins'] is None:
-                            balances=InventoryController(self.device,self.folder/'balances').wallet()
-                            for currency,value in balances.items():
-                                if value is not None:self.data['wallet'][currency]=value
                         if area not in self.fishing_presentations:
                             detector = FishingDetector(area=area)
                             self.fishing_presentations[area] = (detector, FishingSolver(detector))
@@ -678,6 +706,7 @@ class BotWorker:
                                                  trial_settings=TrialSettings(poll_interval=.02),
                                                  detector=detector, solver=solver,
                                                  recover_uncertain=True,reuse_ready=True,
+                                                 ready_handoff=ready_handoff,
                                                  output=self.folder / f'round_{index:04d}')
                         result = session.run()
                         for round_ in result.rounds:
@@ -716,6 +745,9 @@ class BotWorker:
                                 self.publish()
                                 continue
                             raise RuntimeError(self.explain_error(result.reason))
+                        verified = session.verified_ready
+                        self.ready_for_next=(area,verified) if isinstance(verified,tuple) and len(verified)==3 else None
+                        self.refresh_wallet_display(index)
                         self.data['status'] = 'RUNNING'
                         self.rooms.tried.clear()
                         self.publish()

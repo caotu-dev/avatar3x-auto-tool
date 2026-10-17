@@ -123,4 +123,4 @@ cache rương; thất bại báo ERROR, không kết thúc bằng trạng thái 
 
 Chỉ chạy `dist/AvatarFishingBot/AvatarFishingBot.exe` hoặc shortcut `Avatar Fishing Bot.lnk`; cần giữ các thư viện cạnh exe. Công cụ Python trong `.venv` dùng để phát triển/build, không phải bản bot thứ hai. Build thành công tự xóa staging.
 
-Ảnh sự kiện tự động được xoay vòng ba JPEG trong mỗi thư mục chẩn đoán. Debug được dọn định kỳ theo tuổi 24 giờ và ngân sách 128 MB; file đang dùng trong 10 phút gần nhất và kết quả lượt phục vụ khôi phục được giữ. Ảnh OCR làm việc, ảnh xuất thủ công, `vision/templates`, `tests/fixtures`, `ui/assets` và `runtime` không bị chuyển sang ảnh nén. Dữ liệu nhiệm vụ/vé/mồi lưu trong `runtime`, không phụ thuộc ảnh debug.
+Ảnh sự kiện tự động được xoay vòng ba JPEG trong mỗi thư mục chẩn đoán. Debug được dọn định kỳ theo tuổi 24 giờ và ngân sách 32 MiB, tối đa 128 báo cáo lượt GUI; file đang dùng trong 10 phút gần nhất và kết quả lượt phục vụ khôi phục được giữ. Ảnh OCR làm việc, ảnh xuất thủ công, `vision/templates`, `tests/fixtures`, `ui/assets` và `runtime` không bị chuyển sang ảnh nén. Dữ liệu nhiệm vụ/vé/mồi lưu trong `runtime`, không phụ thuộc ảnh debug.

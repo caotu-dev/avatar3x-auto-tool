@@ -46,7 +46,8 @@ class FishingSession:
                  detector: Detector | None = None, solver: Solver | None = None,
                  output: Path | None = None, clock: Callable[[], float] = time.monotonic,
                  sleep: Callable[[float], None] = time.sleep, area: str = "ca_ro",
-                 recover_uncertain: bool = False, reuse_ready: bool = False):
+                 recover_uncertain: bool = False, reuse_ready: bool = False,
+                 ready_handoff=None):
         if type(settings.rounds) is not int or settings.rounds <= 0:
             raise ValueError("Số lượt phải là số nguyên dương")
         self.device = device
@@ -56,6 +57,7 @@ class FishingSession:
         self.recover_uncertain = recover_uncertain
         self.reuse_ready=reuse_ready
         self.verified_ready=None
+        self.ready_handoff=ready_handoff
         self.detector = detector or FishingDetector(area=area)
         self.solver = solver or FishingSolver(self.detector)
         self.output = output or ROOT / "debug" / "runs" / datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
@@ -103,6 +105,15 @@ class FishingSession:
         return result
 
     def _prepare_ready(self, after_round: bool = False) -> tuple[bool, str]:
+        # A completed GUI round has already observed two READY frames. Reuse
+        # that proof only immediately, once, before any intervening navigation.
+        handoff, self.ready_handoff = self.ready_handoff, None
+        if (not after_round and self.reuse_ready and handoff is not None
+                and 0 <= self.clock()-handoff[2] <= .25
+                and handoff[1].state is FishingState.READY and handoff[1].scene_confirmed):
+            self.verified_ready=handoff
+            self.last_screen=handoff[0]
+            return True, 'Đã xác nhận Quăng câu từ lượt trước'
         # ADB capture + recognition can take several seconds per observation.
         # Post-catch animation still needs two verified frames before each tap.
         transition_timeout = max(self.settings.transition_timeout,12.0) if after_round else self.settings.transition_timeout
