@@ -1,0 +1,2 @@
+{"event": "PREPARE_UNKNOWN", "elapsed": 1.235, "after_round": 0, "image": "000_PREPARE_UNKNOWN.png"}
+{"event": "STOP", "elapsed": 21.422, "after_round": 0, "image": "001_STOP.png", "status": "STOPPED", "reason": "Chưa thấy ghế trống đủ tin cậy (có thể bị người chơi che); không bấm ghế mù"}

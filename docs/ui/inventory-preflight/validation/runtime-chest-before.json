@@ -1,0 +1,34 @@
+[
+  {
+    "Path": "F:\\avatar-fishing-bot\\dist\\AvatarFishingBot\\runtime\\custom_mission.json",
+    "Hash": "60B43F686B91AD4D9F9D7A9CF650753DEE7A5066312DFEE4A70DA055BD4B27BF"
+  },
+  {
+    "Path": "F:\\avatar-fishing-bot\\dist\\AvatarFishingBot\\runtime\\gui.lock",
+    "Hash": "5FECEB66FFC86F38D952786C6D696C79C2DBC239DD4E91B46729D73A27FB57E9"
+  },
+  {
+    "Path": "F:\\avatar-fishing-bot\\dist\\AvatarFishingBot\\runtime\\navigation.json",
+    "Hash": "82C53B926E325B8A32FE776E7A98EDAF4B28239BABA3A3EAE12C6324A0ED5F72"
+  },
+  {
+    "Path": "F:\\avatar-fishing-bot\\dist\\AvatarFishingBot\\runtime\\purchase_receipt_recovery_20261010.json",
+    "Hash": "5284F0C3BE52551F9DF04EC34F61FBB4346BAF138B0AFE831BD783D7691DF28D"
+  },
+  {
+    "Path": "F:\\avatar-fishing-bot\\dist\\AvatarFishingBot\\runtime\\ui_inventory.before_receipt_recovery_20261010.json",
+    "Hash": "E10B187672A63BF5628E46C9A1F6F1F1E2781AE62980D1C01DCA3582E2888F57"
+  },
+  {
+    "Path": "F:\\avatar-fishing-bot\\dist\\AvatarFishingBot\\runtime\\ui_inventory.json",
+    "Hash": "9AB5A46B46586BD561264F32BE558816D6B2BF2B0A22EA53F448B6B15FBAF137"
+  },
+  {
+    "Path": "F:\\avatar-fishing-bot\\dist\\AvatarFishingBot\\runtime\\ui_last.json",
+    "Hash": "F412EA8BAF3CE168B03E15CC3A67E1F890DBF38C2F5C873AD3C58E1E78A1D6F9"
+  },
+  {
+    "Path": "F:\\avatar-fishing-bot\\dist\\AvatarFishingBot\\runtime\\ui_preferences.json",
+    "Hash": "BC07E45CBDAF4A22474A91A543F6051C151756F6EB22B5424915290220841F4A"
+  }
+]

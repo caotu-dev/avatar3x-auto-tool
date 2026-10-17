@@ -1,0 +1,2 @@
+{"event": "TAP", "image": "000_TAP.png", "action": "Chọn thuyền trống", "point": [341, 304]}
+{"event": "READY", "image": "001_READY.png", "reason": "Đã xác nhận Quăng câu tại Bến Tàu"}

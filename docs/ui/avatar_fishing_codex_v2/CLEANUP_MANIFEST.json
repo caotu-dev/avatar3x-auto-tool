@@ -1,0 +1,697 @@
+[
+  {
+    "path": "build_gui_v2.ps1",
+    "files": 1,
+    "bytes": 356.0
+  },
+  {
+    "path": "debug/add_timer_test.py",
+    "files": 1,
+    "bytes": 644.0
+  },
+  {
+    "path": "debug/blue_assets.py",
+    "files": 1,
+    "bytes": 420.0
+  },
+  {
+    "path": "debug/build_world_report.py",
+    "files": 1,
+    "bytes": 4004.0
+  },
+  {
+    "path": "debug/button_v2.py",
+    "files": 1,
+    "bytes": 1656.0
+  },
+  {
+    "path": "debug/capture_v2.py",
+    "files": 1,
+    "bytes": 1190.0
+  },
+  {
+    "path": "debug/chair_crop.png",
+    "files": 1,
+    "bytes": 19106.0
+  },
+  {
+    "path": "debug/cleanup_work.py",
+    "files": 1,
+    "bytes": 2664.0
+  },
+  {
+    "path": "debug/dispose_v2.py",
+    "files": 1,
+    "bytes": 1485.0
+  },
+  {
+    "path": "debug/dock_approach.png",
+    "files": 1,
+    "bytes": 978221.0
+  },
+  {
+    "path": "debug/dock_bait_item.png",
+    "files": 1,
+    "bytes": 712067.0
+  },
+  {
+    "path": "debug/dock_boat_walk.png",
+    "files": 1,
+    "bytes": 987317.0
+  },
+  {
+    "path": "debug/dock_enter.png",
+    "files": 1,
+    "bytes": 982117.0
+  },
+  {
+    "path": "debug/dock_hitbox.png",
+    "files": 1,
+    "bytes": 446790.0
+  },
+  {
+    "path": "debug/dock_items.png",
+    "files": 1,
+    "bytes": 682513.0
+  },
+  {
+    "path": "debug/dock_now.png",
+    "files": 1,
+    "bytes": 973900.0
+  },
+  {
+    "path": "debug/dock_ready.png",
+    "files": 1,
+    "bytes": 982811.0
+  },
+  {
+    "path": "debug/dock_ready2.png",
+    "files": 1,
+    "bytes": 981134.0
+  },
+  {
+    "path": "debug/dock_room_menu.png",
+    "files": 1,
+    "bytes": 701595.0
+  },
+  {
+    "path": "debug/dock_room1_idle.png",
+    "files": 1,
+    "bytes": 932141.0
+  },
+  {
+    "path": "debug/dock_room1.png",
+    "files": 1,
+    "bytes": 419080.0
+  },
+  {
+    "path": "debug/dock_rooms.png",
+    "files": 1,
+    "bytes": 994950.0
+  },
+  {
+    "path": "debug/dock_rooms2.png",
+    "files": 1,
+    "bytes": 982776.0
+  },
+  {
+    "path": "debug/dock_seat_check.png",
+    "files": 1,
+    "bytes": 977400.0
+  },
+  {
+    "path": "debug/dock_seat_check2.png",
+    "files": 1,
+    "bytes": 974877.0
+  },
+  {
+    "path": "debug/dock_seat_final.png",
+    "files": 1,
+    "bytes": 982252.0
+  },
+  {
+    "path": "debug/dock_seated.png",
+    "files": 1,
+    "bytes": 988402.0
+  },
+  {
+    "path": "debug/dock_shop_now.png",
+    "files": 1,
+    "bytes": 874444.0
+  },
+  {
+    "path": "debug/dock_start.png",
+    "files": 1,
+    "bytes": 984545.0
+  },
+  {
+    "path": "debug/ecological_rooms.png",
+    "files": 1,
+    "bytes": 623011.0
+  },
+  {
+    "path": "debug/explore.py",
+    "files": 1,
+    "bytes": 952.0
+  },
+  {
+    "path": "debug/finalize_v2.py",
+    "files": 1,
+    "bytes": 3758.0
+  },
+  {
+    "path": "debug/fish_text_samples.png",
+    "files": 1,
+    "bytes": 137101.0
+  },
+  {
+    "path": "debug/gui_fix_live.png",
+    "files": 1,
+    "bytes": 1016210.0
+  },
+  {
+    "path": "debug/gui.before_v2.py",
+    "files": 1,
+    "bytes": 39679.0
+  },
+  {
+    "path": "debug/implement_v2.py",
+    "files": 1,
+    "bytes": 11186.0
+  },
+  {
+    "path": "debug/nav_admin_entry.png",
+    "files": 1,
+    "bytes": 1012934.0
+  },
+  {
+    "path": "debug/nav_beach_left.png",
+    "files": 1,
+    "bytes": 639167.0
+  },
+  {
+    "path": "debug/nav_city_entry.png",
+    "files": 1,
+    "bytes": 912496.0
+  },
+  {
+    "path": "debug/nav_dock_entry.png",
+    "files": 1,
+    "bytes": 823973.0
+  },
+  {
+    "path": "debug/nav_entertainment.png",
+    "files": 1,
+    "bytes": 1024888.0
+  },
+  {
+    "path": "debug/nav_fishing_entry.png",
+    "files": 1,
+    "bytes": 845089.0
+  },
+  {
+    "path": "debug/nav_hall_clicked.png",
+    "files": 1,
+    "bytes": 567061.0
+  },
+  {
+    "path": "debug/nav_hall_entry.png",
+    "files": 1,
+    "bytes": 1123586.0
+  },
+  {
+    "path": "debug/nav_hall_inside.png",
+    "files": 1,
+    "bytes": 1104939.0
+  },
+  {
+    "path": "debug/nav_hall_wait.png",
+    "files": 1,
+    "bytes": 1141853.0
+  },
+  {
+    "path": "debug/nav_live.png",
+    "files": 1,
+    "bytes": 273611.0
+  },
+  {
+    "path": "debug/nav_maze_entry.png",
+    "files": 1,
+    "bytes": 589847.0
+  },
+  {
+    "path": "debug/nav_menu.png",
+    "files": 1,
+    "bytes": 853636.0
+  },
+  {
+    "path": "debug/nav_outside_suburb.png",
+    "files": 1,
+    "bytes": 832563.0
+  },
+  {
+    "path": "debug/nav_pier_after.png",
+    "files": 1,
+    "bytes": 836791.0
+  },
+  {
+    "path": "debug/nav_pier_entry.png",
+    "files": 1,
+    "bytes": 834054.0
+  },
+  {
+    "path": "debug/nav_pier_idle.png",
+    "files": 1,
+    "bytes": 841914.0
+  },
+  {
+    "path": "debug/nav_pier_left_gate.png",
+    "files": 1,
+    "bytes": 649686.0
+  },
+  {
+    "path": "debug/nav_pier_second.png",
+    "files": 1,
+    "bytes": 610611.0
+  },
+  {
+    "path": "debug/nav_pier_wait.png",
+    "files": 1,
+    "bytes": 381674.0
+  },
+  {
+    "path": "debug/nav_start.png",
+    "files": 1,
+    "bytes": 1463621.0
+  },
+  {
+    "path": "debug/nav_suburb_left.png",
+    "files": 1,
+    "bytes": 838308.0
+  },
+  {
+    "path": "debug/nav_suburb_right.png",
+    "files": 1,
+    "bytes": 921817.0
+  },
+  {
+    "path": "debug/nav_top_left.png",
+    "files": 1,
+    "bytes": 1423985.0
+  },
+  {
+    "path": "debug/nav_world_bottom.png",
+    "files": 1,
+    "bytes": 1278217.0
+  },
+  {
+    "path": "debug/nav_world_left.png",
+    "files": 1,
+    "bytes": 1286145.0
+  },
+  {
+    "path": "debug/nav_world_pier.png",
+    "files": 1,
+    "bytes": 1282588.0
+  },
+  {
+    "path": "debug/nav_world2.png",
+    "files": 1,
+    "bytes": 1384914.0
+  },
+  {
+    "path": "debug/nav_world3.png",
+    "files": 1,
+    "bytes": 1345777.0
+  },
+  {
+    "path": "debug/overlay_fix.py",
+    "files": 1,
+    "bytes": 523.0
+  },
+  {
+    "path": "debug/polish_v2.py",
+    "files": 1,
+    "bytes": 4527.0
+  },
+  {
+    "path": "debug/popup_fix.py",
+    "files": 1,
+    "bytes": 835.0
+  },
+  {
+    "path": "debug/prepare_v2_assets.py",
+    "files": 1,
+    "bytes": 1137.0
+  },
+  {
+    "path": "debug/quest_after_back.png",
+    "files": 1,
+    "bytes": 188759.0
+  },
+  {
+    "path": "debug/quest_current.png",
+    "files": 1,
+    "bytes": 849697.0
+  },
+  {
+    "path": "debug/quest_details.png",
+    "files": 1,
+    "bytes": 286462.0
+  },
+  {
+    "path": "debug/quest_menu.png",
+    "files": 1,
+    "bytes": 694560.0
+  },
+  {
+    "path": "debug/quest_reopen.png",
+    "files": 1,
+    "bytes": 856711.0
+  },
+  {
+    "path": "debug/receipt_crop.png",
+    "files": 1,
+    "bytes": 19551.0
+  },
+  {
+    "path": "debug/refine_v2.py",
+    "files": 1,
+    "bytes": 2583.0
+  },
+  {
+    "path": "debug/replay_solver_validation.py",
+    "files": 1,
+    "bytes": 1745.0
+  },
+  {
+    "path": "debug/responsive_v2.py",
+    "files": 1,
+    "bytes": 1825.0
+  },
+  {
+    "path": "debug/rooms_before.png",
+    "files": 1,
+    "bytes": 878858.0
+  },
+  {
+    "path": "debug/theme_v2.py",
+    "files": 1,
+    "bytes": 727.0
+  },
+  {
+    "path": "debug/ui_preview.png",
+    "files": 1,
+    "bytes": 128650.0
+  },
+  {
+    "path": "debug/ui_theme_preview.png",
+    "files": 1,
+    "bytes": 157301.0
+  },
+  {
+    "path": "debug/update_current.png",
+    "files": 1,
+    "bytes": 868606.0
+  },
+  {
+    "path": "debug/v2-1024.png",
+    "files": 1,
+    "bytes": 336458.0
+  },
+  {
+    "path": "debug/v2-1280.png",
+    "files": 1,
+    "bytes": 429103.0
+  },
+  {
+    "path": "debug/v2-1536.png",
+    "files": 1,
+    "bytes": 516092.0
+  },
+  {
+    "path": "debug/v2-acceptance-tests.txt",
+    "files": 1,
+    "bytes": 110.0
+  },
+  {
+    "path": "debug/v2-build.txt",
+    "files": 1,
+    "bytes": 7075.0
+  },
+  {
+    "path": "debug/v2-focused-final.txt",
+    "files": 1,
+    "bytes": 114.0
+  },
+  {
+    "path": "debug/v2-focused-tests.txt",
+    "files": 1,
+    "bytes": 327.0
+  },
+  {
+    "path": "debug/v2-gui-tests.txt",
+    "files": 1,
+    "bytes": 6069.0
+  },
+  {
+    "path": "debug/v2-layout-checks.txt",
+    "files": 1,
+    "bytes": 2033.0
+  },
+  {
+    "path": "debug/v2-settings.png",
+    "files": 1,
+    "bytes": 482662.0
+  },
+  {
+    "path": "debug/v2-tests.txt",
+    "files": 1,
+    "bytes": 8852.0
+  },
+  {
+    "path": "debug/world_now.png",
+    "files": 1,
+    "bytes": 1443506.0
+  },
+  {
+    "path": "docs/avatar_fishing_codex_bundle",
+    "files": 79,
+    "bytes": 7039116.0
+  },
+  {
+    "path": "docs/avatar_fishing_concept_assets",
+    "files": 54,
+    "bytes": 3386424.0
+  },
+  {
+    "path": "docs/avatar-fishing-ui-redesign",
+    "files": 30,
+    "bytes": 7883003.0
+  },
+  {
+    "path": "gui-ui-check.json",
+    "files": 1,
+    "bytes": 125.0
+  },
+  {
+    "path": "ui/assets/PROVENANCE.md",
+    "files": 1,
+    "bytes": 357.0
+  },
+  {
+    "path": "ui\\assets\\dropdown_chevrons.png",
+    "files": 1,
+    "bytes": 536.0
+  },
+  {
+    "path": "ui\\assets\\fish_ca_lia_thia.png",
+    "files": 1,
+    "bytes": 4633.0
+  },
+  {
+    "path": "ui\\assets\\nav_selected.png",
+    "files": 1,
+    "bytes": 344.0
+  },
+  {
+    "path": "ui\\assets\\overview_fish_blue.png",
+    "files": 1,
+    "bytes": 1742.0
+  },
+  {
+    "path": "ui\\assets\\overview_hook_gold.png",
+    "files": 1,
+    "bytes": 1419.0
+  },
+  {
+    "path": "ui\\assets\\overview_time_purple.png",
+    "files": 1,
+    "bytes": 1979.0
+  },
+  {
+    "path": "ui\\assets\\panel_collapse_chevron.png",
+    "files": 1,
+    "bytes": 411.0
+  },
+  {
+    "path": "ui\\assets\\panel_time_clock.png",
+    "files": 1,
+    "bytes": 1428.0
+  },
+  {
+    "path": "ui\\assets\\section_gamepad.png",
+    "files": 1,
+    "bytes": 1547.0
+  },
+  {
+    "path": "ui\\assets\\sidebar_freestyle.png",
+    "files": 1,
+    "bytes": 853.0
+  },
+  {
+    "path": "ui\\assets\\sidebar_game_task.png",
+    "files": 1,
+    "bytes": 897.0
+  },
+  {
+    "path": "ui\\assets\\sidebar_goal.png",
+    "files": 1,
+    "bytes": 1036.0
+  },
+  {
+    "path": "ui\\assets\\sidebar_help.png",
+    "files": 1,
+    "bytes": 713.0
+  },
+  {
+    "path": "ui\\assets\\sidebar_home.png",
+    "files": 1,
+    "bytes": 1146.0
+  },
+  {
+    "path": "ui\\assets\\sidebar_log.png",
+    "files": 1,
+    "bytes": 554.0
+  },
+  {
+    "path": "ui\\assets\\sidebar_settings.png",
+    "files": 1,
+    "bytes": 1108.0
+  },
+  {
+    "path": "ui\\assets\\sidebar_stats.png",
+    "files": 1,
+    "bytes": 512.0
+  },
+  {
+    "path": "ui\\assets\\tab.png",
+    "files": 1,
+    "bytes": 455.0
+  },
+  {
+    "path": "ui\\assets\\time_input_clock.png",
+    "files": 1,
+    "bytes": 826.0
+  },
+  {
+    "path": "ui\\assets\\timer_scene_228.png",
+    "files": 1,
+    "bytes": 53647.0
+  },
+  {
+    "path": "ui\\assets\\timer_scene_300.png",
+    "files": 1,
+    "bytes": 87119.0
+  },
+  {
+    "path": "build",
+    "files": 3718,
+    "bytes": 568464070.0
+  },
+  {
+    "path": "dist-v2",
+    "files": 1245,
+    "bytes": 173415030.0
+  },
+  {
+    "path": "debug/cleanup_remove.ps1",
+    "files": 1,
+    "bytes": 2550.0
+  },
+  {
+    "path": "debug/promote_main.ps1",
+    "files": 1,
+    "bytes": 5123.0
+  },
+  {
+    "path": "debug/unused-ui-assets.json",
+    "files": 1,
+    "bytes": 799.0
+  },
+  {
+    "path": "debug/runtime-before-build.json",
+    "files": 1,
+    "bytes": 1064.0
+  },
+  {
+    "path": "debug/cleanup-tests.txt",
+    "files": 1,
+    "bytes": 753.0
+  },
+  {
+    "path": "debug/main-build.txt",
+    "files": 1,
+    "bytes": 6991.0
+  },
+  {
+    "path": "debug/v2-tests-final.txt",
+    "files": 1,
+    "bytes": 542.0
+  },
+  {
+    "path": "debug/v2-build-final.txt",
+    "files": 1,
+    "bytes": 7057.0
+  },
+  {
+    "path": ".\\__pycache__",
+    "files": 2,
+    "bytes": 74747.0
+  },
+  {
+    "path": "adb\\__pycache__",
+    "files": 3,
+    "bytes": 9526.0
+  },
+  {
+    "path": "config\\__pycache__",
+    "files": 2,
+    "bytes": 2925.0
+  },
+  {
+    "path": "debug\\__pycache__",
+    "files": 5,
+    "bytes": 15858.0
+  },
+  {
+    "path": "fishing\\__pycache__",
+    "files": 17,
+    "bytes": 188692.0
+  },
+  {
+    "path": "tests\\__pycache__",
+    "files": 24,
+    "bytes": 199262.0
+  },
+  {
+    "path": "ui\\__pycache__",
+    "files": 5,
+    "bytes": 66103.0
+  },
+  {
+    "path": "vision\\__pycache__",
+    "files": 3,
+    "bytes": 7307.0
+  }
+]

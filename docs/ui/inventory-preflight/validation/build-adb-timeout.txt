@@ -1,0 +1,83 @@
+535 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.8
+535 INFO: Python: 3.12.14
+897 INFO: Platform: Windows-11-10.0.26200-SP0
+897 INFO: Python environment: F:\avatar-fishing-bot\.venv
+910 INFO: Module search paths (PYTHONPATH):
+['F:\\avatar-fishing-bot',
+ 'C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python312.zip',
+ 'C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\DLLs',
+ 'C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib',
+ 'C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python',
+ 'F:\\avatar-fishing-bot\\.venv',
+ 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages',
+ 'F:\\avatar-fishing-bot']
+2063 INFO: Appending 'datas' from .spec
+2087 INFO: checking Analysis
+2179 INFO: Building because F:\avatar-fishing-bot\adb\device.py changed
+2179 INFO: Looking for Python shared library...
+2179 INFO: Using Python shared library: C:\Users\ADMIN\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python312.dll
+2179 INFO: Running Analysis Analysis-00.toc
+2179 INFO: Target bytecode optimization level: 0
+2179 INFO: Initializing module dependency graph...
+2184 INFO: Initializing module graph hook caches...
+2211 INFO: Analyzing modules for base_library.zip ...
+5360 INFO: Processing standard module hook 'hook-encodings.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+6596 INFO: Processing standard module hook 'hook-math.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+7619 INFO: Processing standard module hook 'hook-pickle.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+8755 INFO: Processing standard module hook 'hook-heapq.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+9278 INFO: Caching module dependency graph...
+9318 INFO: Analyzing F:\avatar-fishing-bot\gui.py
+9416 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+9419 INFO: TclTkInfo: initializing cached Tcl/Tk info...
+10178 INFO: Processing standard module hook 'hook-_tkinter.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+10258 INFO: Processing standard module hook 'hook-cv2.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+11639 INFO: Processing standard module hook 'hook-numpy.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+12017 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+12022 INFO: SetuptoolsInfo: initializing cached setuptools info...
+13754 INFO: Processing standard module hook 'hook-platform.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+13907 INFO: Processing standard module hook 'hook-sysconfig.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+14188 INFO: Processing standard module hook 'hook-webbrowser.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+14801 INFO: Processing standard module hook 'hook-_ctypes.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+15264 INFO: Processing standard module hook 'hook-difflib.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+15493 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+15577 INFO: Processing standard module hook 'hook-xml.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+17387 INFO: Processing module hooks (post-graph stage)...
+17464 INFO: Processing standard module hook 'hook-_tkinter.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks'
+17483 INFO: Performing binary vs. data reclassification (1133 entries)
+17916 INFO: Looking for ctypes DLLs
+17944 INFO: Analyzing run-time hooks ...
+17948 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+17952 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+17959 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+17964 INFO: Including run-time hook 'pyi_rth__tkinter.py' from 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+18000 INFO: Creating base_library.zip...
+18019 INFO: Looking for dynamic libraries
+19125 INFO: Extra DLL search directories (AddDllDirectory): ['F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\numpy.libs', 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\cv2\\../../x64/vc17/bin']
+19125 INFO: Extra DLL search directories (PATH): ['F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages\\cv2\\../../x64/vc17/bin']
+20914 INFO: Warnings written to F:\avatar-fishing-bot\build\pyinstaller\AvatarFishingBot\warn-AvatarFishingBot.txt
+20969 INFO: Graph cross-reference written to F:\avatar-fishing-bot\build\pyinstaller\AvatarFishingBot\xref-AvatarFishingBot.html
+21028 INFO: checking PYZ
+21047 INFO: Building because F:\avatar-fishing-bot\adb\device.py changed
+21047 INFO: Building PYZ (ZlibArchive) F:\avatar-fishing-bot\build\pyinstaller\AvatarFishingBot\PYZ-00.pyz
+21470 INFO: Building PYZ (ZlibArchive) F:\avatar-fishing-bot\build\pyinstaller\AvatarFishingBot\PYZ-00.pyz completed successfully.
+21483 INFO: checking PKG
+21495 INFO: Building because F:\avatar-fishing-bot\build\pyinstaller\AvatarFishingBot\PYZ-00.pyz changed
+21495 INFO: Building PKG (CArchive) AvatarFishingBot.pkg
+21585 INFO: Building PKG (CArchive) AvatarFishingBot.pkg completed successfully.
+21587 INFO: Bootloader F:\avatar-fishing-bot\.venv\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+21587 INFO: checking EXE
+21607 INFO: Rebuilding EXE-00.toc because pkg is more recent
+21607 INFO: Building EXE from EXE-00.toc
+21608 INFO: Copying bootloader EXE to F:\avatar-fishing-bot\build\pyinstaller\AvatarFishingBot\AvatarFishingBot.exe
+21664 INFO: Copying icon to EXE
+21703 INFO: Copying 0 resources to EXE
+21703 INFO: Embedding manifest in EXE
+21750 INFO: Appending PKG archive to EXE
+21831 INFO: Fixing EXE headers
+22081 INFO: Building EXE from EXE-00.toc completed successfully.
+22092 INFO: checking COLLECT
+22118 INFO: Removing dir F:\avatar-fishing-bot\build\release-stage\AvatarFishingBot
+22422 INFO: Building COLLECT COLLECT-00.toc
+24349 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+24373 INFO: Build complete! The results are available in: F:\avatar-fishing-bot\build\release-stage
+Mở dist\AvatarFishingBot\AvatarFishingBot.exe. Giữ nguyên cả thư mục. runtime/debug được giữ khi build lại.

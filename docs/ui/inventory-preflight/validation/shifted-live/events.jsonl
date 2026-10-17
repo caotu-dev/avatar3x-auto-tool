@@ -1,0 +1,9 @@
+{"event": "PREPARE_FINISH", "elapsed": 0.875, "after_round": 0, "image": "000_PREPARE_FINISH.png"}
+{"event": "FINISH", "elapsed": 2.047, "after_round": 0, "image": "001_FINISH.png", "point": [1465, 845], "attempt": 1}
+{"event": "PREPARE_READY", "elapsed": 3.235, "after_round": 0, "image": "002_PREPARE_READY.png"}
+{"event": "PREPARE_SUCCESS", "elapsed": 42.032, "after_round": 1, "image": "003_PREPARE_SUCCESS.png"}
+{"event": "DISMISS_POPUP", "elapsed": 42.875, "after_round": 1, "image": "004_DISMISS_POPUP.png", "point": [160, 650]}
+{"event": "PREPARE_FINISH", "elapsed": 43.985, "after_round": 1, "image": "005_PREPARE_FINISH.png"}
+{"event": "FINISH", "elapsed": 45.032, "after_round": 1, "image": "006_FINISH.png", "point": [1465, 845], "attempt": 1}
+{"event": "PREPARE_READY", "elapsed": 46.125, "after_round": 1, "image": "007_PREPARE_READY.png"}
+{"event": "STOP", "elapsed": 47.157, "after_round": 1, "image": "008_STOP.png", "status": "COMPLETE", "reason": "Đã kết thúc 1 lượt; màn hình sẵn sàng Quăng câu"}

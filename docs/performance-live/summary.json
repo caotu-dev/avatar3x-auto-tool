@@ -1,0 +1,29 @@
+{
+  "status": "COMPLETE",
+  "reason": "Đã kết thúc 1 lượt; màn hình sẵn sàng Quăng câu",
+  "rounds": [
+    {
+      "outcome": "SUCCESS",
+      "reason": "Đã thấy popup nhận cá",
+      "casts": 1,
+      "drags": 5,
+      "confirmed": 3,
+      "fish_species": "ca_ro",
+      "fish_name": "Cá rô",
+      "fish_confidence": 1.0,
+      "area": "ca_ro",
+      "bite_observed": true
+    }
+  ],
+  "counts": {
+    "SUCCESS": 1
+  },
+  "casts": 1,
+  "area": "ca_ro",
+  "bites": 1,
+  "misses": 0,
+  "misses_confirmed": 0,
+  "fish_counts": {
+    "ca_ro": 1
+  }
+}

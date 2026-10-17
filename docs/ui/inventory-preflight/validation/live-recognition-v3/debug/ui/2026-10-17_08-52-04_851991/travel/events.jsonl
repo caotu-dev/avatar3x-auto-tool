@@ -1,0 +1,4 @@
+{"event": "TAP", "image": "000_TAP.png", "action": "Mở shop", "point": [1356, 425]}
+{"event": "TAP", "image": "001_TAP.png", "action": "Cửa Hàng Cá", "point": [799, 220]}
+{"event": "TAP", "image": "002_TAP.png", "action": "Chọn ô Mồi Trùng đã khảo sát", "point": [999, 261]}
+{"event": "TIMEOUT", "image": "003_TIMEOUT.png", "expected": "Mồi Trùng giá 20 xu"}

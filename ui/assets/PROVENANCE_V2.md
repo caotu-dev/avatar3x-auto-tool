@@ -1,0 +1,3 @@
+V2 fish icons copied from user-supplied assets/fish-icons-clean, keyed by existing species IDs. Header derived from supplied dashboard_main scenery, cropped below native title buttons; raster branding removed for live text. No new game species or claimed official artwork. Theme token JSON bundled offline.
+
+Legacy small glyphs and empty-state illustrations were previously derived from user-supplied concept artwork; redundant historical source packs were removed during main-release cleanup. Current approved reference images remain in docs/ui/avatar_fishing_codex_v2/assets/references. Rounded controls are generated locally; no Pillow runtime dependency.

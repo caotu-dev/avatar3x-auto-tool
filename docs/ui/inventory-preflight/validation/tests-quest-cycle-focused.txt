@@ -1,0 +1,10 @@
+[ WARN:0@0.213] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpvxm11jty\vision\templates\quest_icon.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.215] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpvxm11jty\vision\templates\quest_current_button.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.215] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpvxm11jty\vision\templates\quest_title.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.237] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpxpkdtm6u\vision\templates\quest_icon.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.237] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpxpkdtm6u\vision\templates\quest_current_button.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.237] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpxpkdtm6u\vision\templates\quest_title.png'): can't open/read file: check file path/integrity
+----------------------------------------------------------------------
+Ran 6 tests in 0.138s
+
+OK

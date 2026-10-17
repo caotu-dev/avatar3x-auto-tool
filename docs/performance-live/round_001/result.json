@@ -1,0 +1,12 @@
+{
+  "outcome": "SUCCESS",
+  "reason": "Đã thấy popup nhận cá",
+  "casts": 1,
+  "drags": 5,
+  "confirmed": 3,
+  "fish_species": "ca_ro",
+  "fish_name": "Cá rô",
+  "fish_confidence": 1.0,
+  "area": "ca_ro",
+  "bite_observed": true
+}

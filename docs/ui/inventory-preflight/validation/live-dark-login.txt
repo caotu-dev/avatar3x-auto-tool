@@ -1,0 +1,2 @@
+[DI CHUYỂN] Chơi tiếp sau mất phiên: (656, 560)
+{'status': 'READY', 'attempts': 1}

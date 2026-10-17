@@ -1,0 +1,132 @@
+[
+  {
+    "fishIdHint": "ca_chep_vang",
+    "displayName": "Cá chép vàng",
+    "path": "assets/fish-icons-clean/ca_chep_vang.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      477,
+      179,
+      517
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "ca_loc",
+    "displayName": "Cá lóc",
+    "path": "assets/fish-icons-clean/ca_loc.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      520,
+      179,
+      560
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "ca_chim",
+    "displayName": "Cá chim",
+    "path": "assets/fish-icons-clean/ca_chim.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      564,
+      179,
+      604
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "ca_ngua",
+    "displayName": "Cá ngựa",
+    "path": "assets/fish-icons-clean/ca_ngua.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      606,
+      179,
+      646
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "ca_long_tong",
+    "displayName": "Cá lòng tong",
+    "path": "assets/fish-icons-clean/ca_long_tong.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      651,
+      179,
+      691
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "ca_noc",
+    "displayName": "Cá nóc",
+    "path": "assets/fish-icons-clean/ca_noc.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      695,
+      179,
+      735
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "ca_duoi",
+    "displayName": "Cá đuối",
+    "path": "assets/fish-icons-clean/ca_duoi.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      738,
+      179,
+      778
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "ca_lia_thia",
+    "displayName": "Cá lia thia",
+    "path": "assets/fish-icons-clean/ca_lia_thia.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      782,
+      179,
+      822
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "cua",
+    "displayName": "Cua",
+    "path": "assets/fish-icons-clean/cua.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      826,
+      179,
+      866
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  },
+  {
+    "fishIdHint": "ca_ro",
+    "displayName": "Cá rô",
+    "path": "assets/fish-icons-clean/ca_ro.png",
+    "source": "assets/references/dashboard_main.png",
+    "crop": [
+      127,
+      874,
+      179,
+      914
+    ],
+    "notes": "corrected crop from flat mockup; may have light background; map to actual fish ID, not catalog index"
+  }
+]

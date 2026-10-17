@@ -1,0 +1,50 @@
+can't invoke "event" command: application has been destroyed
+    while executing
+"event generate $w <<ThemeChanged>>"
+    (procedure "ttk::ThemeChanged" line 6)
+    invoked from within
+"ttk::ThemeChanged"
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (794, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 696)
+[DI CHUY\u1ec2N] \u0110\xf3ng r\u01b0\u01a1ng \u0111\u1ed3: (1510, 35)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 2/3
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 2/3
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 3/3
+[ WARN:0@30.486] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpmnmc8s6q\vision\templates\quest_icon.png'): can't open/read file: check file path/integrity
+[ WARN:0@30.486] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpmnmc8s6q\vision\templates\quest_current_button.png'): can't open/read file: check file path/integrity
+[ WARN:0@30.486] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpmnmc8s6q\vision\templates\quest_title.png'): can't open/read file: check file path/integrity
+[ WARN:0@30.502] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpu8631131\vision\templates\quest_icon.png'): can't open/read file: check file path/integrity
+[ WARN:0@30.502] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpu8631131\vision\templates\quest_current_button.png'): can't open/read file: check file path/integrity
+[ WARN:0@30.502] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmpu8631131\vision\templates\quest_title.png'): can't open/read file: check file path/integrity
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+======================================================================
+FAIL: test_ui_settings_money_ticket_and_preparation_timer (test_inventory.InventoryTests.test_ui_settings_money_ticket_and_preparation_timer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "F:\avatar-fishing-bot\tests\test_inventory.py", line 386, in test_ui_settings_money_ticket_and_preparation_timer
+    self.assertIn('13-10-2026',app.ticket_values['V� c�u c� r�'].get())
+AssertionError: '13-10-2026' not found in 'C� � C�n hi\u1ec7u l\u1ef1c\nH\u1ebft h\u1ea1n: 13-10-2099'
+
+----------------------------------------------------------------------
+Ran 270 tests in 102.527s
+
+FAILED (failures=1)

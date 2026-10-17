@@ -1,0 +1,25 @@
+440 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.8
+441 INFO: Python: 3.12.14
+776 INFO: Platform: Windows-11-10.0.26200-SP0
+776 INFO: Python environment: F:\avatar-fishing-bot\.venv
+783 INFO: Module search paths (PYTHONPATH):
+['F:\\avatar-fishing-bot',
+ 'C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python312.zip',
+ 'C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\DLLs',
+ 'C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib',
+ 'C:\\Users\\ADMIN\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python',
+ 'F:\\avatar-fishing-bot\\.venv',
+ 'F:\\avatar-fishing-bot\\.venv\\Lib\\site-packages',
+ 'F:\\avatar-fishing-bot']
+1725 INFO: Appending 'datas' from .spec
+1739 INFO: checking Analysis
+1908 INFO: checking PYZ
+1947 INFO: checking PKG
+1949 INFO: Bootloader F:\avatar-fishing-bot\.venv\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+1949 INFO: checking EXE
+1958 INFO: checking COLLECT
+1984 INFO: Removing dir F:\avatar-fishing-bot\build\release-stage\AvatarFishingBot
+2251 INFO: Building COLLECT COLLECT-00.toc
+3893 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+3914 INFO: Build complete! The results are available in: F:\avatar-fishing-bot\build\release-stage
+Mở dist\AvatarFishingBot\AvatarFishingBot.exe. Giữ nguyên cả thư mục. runtime/debug được giữ khi build lại.

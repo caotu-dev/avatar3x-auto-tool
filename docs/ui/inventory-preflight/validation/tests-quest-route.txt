@@ -1,0 +1,13 @@
+[ WARN:0@0.133] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmp_3y6dyva\vision\templates\quest_icon.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.133] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmp_3y6dyva\vision\templates\quest_current_button.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.133] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmp_3y6dyva\vision\templates\quest_title.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.147] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmp42lbdez3\vision\templates\quest_icon.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.147] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmp42lbdez3\vision\templates\quest_current_button.png'): can't open/read file: check file path/integrity
+[ WARN:0@0.147] global loadsave.cpp:278 cv::findDecoder imread_('F:\avatar-fishing-bot\debug\tmp42lbdez3\vision\templates\quest_title.png'): can't open/read file: check file path/integrity
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 2/3
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 2/3
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 3/3
+----------------------------------------------------------------------
+Ran 11 tests in 3.482s
+
+OK

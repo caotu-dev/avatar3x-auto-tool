@@ -1,0 +1,14 @@
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (794, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 696)
+[DI CHUY\u1ec2N] \u0110\xf3ng r\u01b0\u01a1ng \u0111\u1ed3: (1510, 35)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+----------------------------------------------------------------------
+Ran 40 tests in 4.822s
+
+OK

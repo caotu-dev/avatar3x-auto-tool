@@ -1,0 +1,22 @@
+.venv/
+__pycache__/
+*.pyc
+debug/screenshots/*.png
+debug/screenshots/sessions/
+debug/trials/
+debug/runs/
+
+# Reproducible build outputs and mutable local state
+build/
+dist/
+runtime/
+gui-ui-check.json
+gui-smoke-test.json
+# Diagnostic output (keep reusable Python tools and written reports)
+debug/**/*.png
+debug/**/*.json
+debug/**/*.jsonl
+debug/**/*.csv
+debug/**/*.log
+debug/*-tests.txt
+debug/*-build.txt

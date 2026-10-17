@@ -1,0 +1,25 @@
+TARGETS [('ca_loc', 'ca_noc'), ('ca_ngua', 'ca_map'), ('ca_ro', 'ca_ro')]
+preparation Đang điều hướng tới Khu Sinh Thái…
+log [CHUẨN BỊ] Đang điều hướng tới Khu Sinh Thái…
+preparation Đang mở rương, kiểm tra vé, mồi và số dư…
+log [CHUẨN BỊ] Đang mở rương, kiểm tra vé, mồi và số dư…
+[DI CHUYỂN] MENU → rương đồ: (96, 50)
+[DI CHUYỂN] Mở rương đồ: (99, 471)
+[DI CHUYỂN] Đọc thông tin item trong rương: (522, 695)
+[DI CHUYỂN] Đọc thông tin item trong rương: (794, 695)
+[DI CHUYỂN] Đóng rương đồ: (1510, 35)
+preparation Đang mua Mồi Trùng…
+log [CHUẨN BỊ] Đang mua Mồi Trùng…
+[DI CHUYỂN] Mở shop: (1356, 425)
+[DI CHUYỂN] Cửa Hàng Cá: (799, 220)
+[DI CHUYỂN] Chọn ô Mồi Trùng đã khảo sát: (999, 261)
+Traceback (most recent call last):
+  File "<string>", line 7, in <module>
+  File "F:\avatar-fishing-bot\ui\runner.py", line 422, in prepare_area
+    quantity=self.travel.sell_and_buy(sell=self.options.sell and bool(self.data['unsold']), buy=True,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\avatar-fishing-bot\fishing\travel.py", line 245, in sell_and_buy
+    self.wait(lambda image: self.world.match(image, "worm")
+  File "F:\avatar-fishing-bot\fishing\travel.py", line 60, in wait
+    raise RuntimeError(f"Kh�ng x�c nh\u1eadn \u0111\u01b0\u1ee3c {label}; \u0111� d\u1eebng thao t�c")
+RuntimeError: Kh�ng x�c nh\u1eadn \u0111\u01b0\u1ee3c M\u1ed3i Tr�ng gi� 20 xu; \u0111� d\u1eebng thao t�c

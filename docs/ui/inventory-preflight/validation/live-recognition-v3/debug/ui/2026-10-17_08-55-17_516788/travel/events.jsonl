@@ -1,0 +1,14 @@
+{"event": "TAP", "image": "000_TAP.png", "action": "Mở shop", "point": [1356, 425]}
+{"event": "TAP", "image": "001_TAP.png", "action": "Cửa Hàng Cá", "point": [799, 220]}
+{"event": "TAP", "image": "002_TAP.png", "action": "Chọn Mồi Trùng (lần 1/3)", "point": [999, 261]}
+{"event": "TAP", "image": "003_TAP.png", "action": "Mua Mồi Trùng", "point": [1089, 632]}
+{"event": "TAP", "image": "004_TAP.png", "action": "Ô số lượng", "point": [798, 500]}
+{"event": "TYPE_QUANTITY", "image": "005_TYPE_QUANTITY.png", "quantity": 50}
+{"event": "TAP", "image": "006_TAP.png", "action": "OK số lượng", "point": [1537, 851]}
+{"event": "PURCHASE_PENDING", "image": "007_PURCHASE_PENDING.png", "quantity": 50}
+{"event": "TAP", "image": "008_TAP.png", "action": "Mua bằng xu: 50 mồi / 1000 xu", "point": [663, 620]}
+{"event": "PURCHASE_CONFIRMED", "image": "009_PURCHASE_CONFIRMED.png", "quantity": 50, "coins": 1000, "bait": "Mồi Trùng"}
+{"event": "TAP", "image": "010_TAP.png", "action": "OK kết quả mua mồi", "point": [798, 554]}
+{"event": "TAP", "image": "011_TAP.png", "action": "Bấm ngoài để đóng shop", "point": [200, 650]}
+{"event": "PAN_RIGHT", "image": "012_PAN_RIGHT.png", "start": [1450, 650], "end": [900, 650]}
+{"event": "TAP", "image": "013_TAP.png", "action": "Sang khu cá nóc", "point": [1535, 606]}

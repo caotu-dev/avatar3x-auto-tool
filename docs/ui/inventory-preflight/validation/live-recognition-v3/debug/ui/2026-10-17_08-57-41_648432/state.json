@@ -1,0 +1,49 @@
+{
+  "status": "NEW",
+  "counts": {},
+  "unsold": {},
+  "casts": 0,
+  "bites": 0,
+  "misses": 0,
+  "unclassified_results": 0,
+  "bait_purchased": 0,
+  "bait_remaining": 50,
+  "purchase_pending": false,
+  "tickets": {
+    "ca_ro": {
+      "status": "unknown",
+      "expires_on": null
+    },
+    "ca_noc": {
+      "status": "unknown",
+      "expires_on": null
+    },
+    "ca_map": {
+      "status": "unknown",
+      "expires_on": null
+    },
+    "dock": {
+      "status": "unknown",
+      "expires_on": null
+    }
+  },
+  "wallet": {
+    "coins": null,
+    "gold": null
+  },
+  "preparing": true,
+  "targets": [],
+  "log": "F:\\avatar-fishing-bot\\docs\\ui\\inventory-preflight\\validation\\live-recognition-v3\\debug\\ui\\2026-10-17_08-57-41_648432",
+  "started_at": "2026-10-17T08:57:41.648432",
+  "bait_stocks": {
+    "ecological": 50,
+    "dock": 0
+  },
+  "last_midnight_sale": null,
+  "fish_inventory_date": "2026-10-17",
+  "bait_estimated": {
+    "ecological": false,
+    "dock": false
+  },
+  "elapsed_seconds": 0
+}

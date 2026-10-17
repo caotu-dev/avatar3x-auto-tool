@@ -1,0 +1,15 @@
+{"event": "PREPARE_WAITING", "elapsed": 0.594, "after_round": 0, "image": "000_PREPARE_WAITING.png"}
+{"event": "STOP", "elapsed": 0.625, "after_round": 0, "image": "001_STOP.png", "status": "STOPPED", "reason": "Game đang ở giữa lượt; không tự kết thúc hay quăng thêm"}
+{"event": "PREPARE_UNKNOWN", "elapsed": 0.437, "after_round": 0, "image": "000_PREPARE_UNKNOWN.png"}
+{"event": "STOP", "elapsed": 20.797, "after_round": 0, "image": "001_STOP.png", "status": "STOPPED", "reason": "Chưa thấy ghế trống đủ tin cậy (có thể bị người chơi che); không bấm ghế mù"}
+{"event": "PREPARE_IDLE", "elapsed": 0.562, "after_round": 0, "image": "000_PREPARE_IDLE.png"}
+{"event": "ENTER_CHAIR", "elapsed": 1.125, "after_round": 0, "image": "001_ENTER_CHAIR.png", "point": [1200, 787]}
+{"event": "PREPARE_UNKNOWN", "elapsed": 3.062, "after_round": 0, "image": "002_PREPARE_UNKNOWN.png"}
+{"event": "PREPARE_READY", "elapsed": 3.656, "after_round": 0, "image": "003_PREPARE_READY.png"}
+{"event": "PREPARE_SUCCESS", "elapsed": 42.187, "after_round": 1, "image": "004_PREPARE_SUCCESS.png"}
+{"event": "DISMISS_POPUP", "elapsed": 42.75, "after_round": 1, "image": "005_DISMISS_POPUP.png", "point": [160, 650]}
+{"event": "PREPARE_FINISH", "elapsed": 43.359, "after_round": 1, "image": "006_PREPARE_FINISH.png"}
+{"event": "FINISH", "elapsed": 43.921, "after_round": 1, "image": "007_FINISH.png", "point": [1465, 845], "attempt": 1}
+{"event": "PREPARE_UNKNOWN", "elapsed": 44.484, "after_round": 1, "image": "008_PREPARE_UNKNOWN.png"}
+{"event": "PREPARE_READY", "elapsed": 45.078, "after_round": 1, "image": "009_PREPARE_READY.png"}
+{"event": "STOP", "elapsed": 45.734, "after_round": 1, "image": "010_STOP.png", "status": "COMPLETE", "reason": "Đã kết thúc 1 lượt; màn hình sẵn sàng Quăng câu"}

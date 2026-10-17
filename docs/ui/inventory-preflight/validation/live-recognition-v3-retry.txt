@@ -1,0 +1,21 @@
+TARGETS [('ca_loc', 'ca_noc'), ('ca_ngua', 'ca_map'), ('ca_ro', 'ca_ro')]
+preparation Đang điều hướng tới Khu Sinh Thái…
+log [CHUẨN BỊ] Đang điều hướng tới Khu Sinh Thái…
+preparation Đang mua Mồi Trùng…
+log [CHUẨN BỊ] Đang mua Mồi Trùng…
+[DI CHUYỂN] Mở shop: (1356, 425)
+[DI CHUYỂN] Cửa Hàng Cá: (799, 220)
+[DI CHUYỂN] Chọn Mồi Trùng (lần 1/3): (999, 261)
+[DI CHUYỂN] Mua Mồi Trùng: (1089, 632)
+[DI CHUYỂN] Ô số lượng: (798, 500)
+[DI CHUYỂN] OK số lượng: (1537, 851)
+[DI CHUYỂN] Mua bằng xu: 50 mồi / 1000 xu: (663, 620)
+[DI CHUYỂN] OK kết quả mua mồi: (798, 554)
+[DI CHUYỂN] Bấm ngoài để đóng shop: (200, 650)
+[DI CHUYỂN] Kéo camera sang phải để hiện cửa khu cá nóc
+[DI CHUYỂN] Sang khu cá nóc: (1535, 606)
+[SESSION] STOPPED: Chưa thấy ghế trống đủ tin cậy (có thể bị người chơi che); không bấm ghế mù
+[SESSION] Báo cáo: F:\avatar-fishing-bot\docs\ui\inventory-preflight\validation\live-recognition-v3\debug\ui\2026-10-17_08-55-17_516788\one_round
+[SESSION] Kết quả: {}
+[SESSION] Cá đã nhận: {}
+LIVE_RESULT SessionResult(status='STOPPED', reason='Chưa thấy ghế trống đủ tin cậy (có thể bị người chơi che); không bấm ghế mù', rounds=())

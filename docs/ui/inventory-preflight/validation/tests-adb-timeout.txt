@@ -1,0 +1,19 @@
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (794, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 696)
+[DI CHUY\u1ec2N] \u0110\xf3ng r\u01b0\u01a1ng \u0111\u1ed3: (1510, 35)
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 2/3
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 2/3
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 3/3
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+----------------------------------------------------------------------
+Ran 198 tests in 72.068s
+
+OK

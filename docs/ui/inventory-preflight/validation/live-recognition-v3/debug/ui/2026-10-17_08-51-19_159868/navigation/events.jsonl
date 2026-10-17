@@ -1,0 +1,3 @@
+{"event": "TAP", "image": "000_TAP.png", "action": "Vào fishing", "point": [863, 203]}
+{"event": "ARRIVED", "image": "001_ARRIVED.png", "location": "fishing"}
+{"event": "ARRIVED", "image": "002_ARRIVED.png", "location": "fishing"}

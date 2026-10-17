@@ -1,0 +1,13 @@
+{
+  "outcome": "RESULT",
+  "ready": true,
+  "cleanup": "Đã thấy Quăng câu",
+  "actual_taps": [
+    [
+      1465,
+      845
+    ]
+  ],
+  "additional_casts": 0,
+  "purchases": 0
+}

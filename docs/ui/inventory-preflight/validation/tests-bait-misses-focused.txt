@@ -1,0 +1,30 @@
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (794, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 696)
+[DI CHUY\u1ec2N] \u0110\xf3ng r\u01b0\u01a1ng \u0111\u1ed3: (1510, 35)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] \u0110\u1ecdc th\xf4ng tin item trong r\u01b0\u01a1ng: (658, 559)
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+======================================================================
+FAIL: test_ui_settings_money_ticket_and_preparation_timer (tests.test_inventory.InventoryTests.test_ui_settings_money_ticket_and_preparation_timer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "F:\avatar-fishing-bot\tests\test_inventory.py", line 349, in test_ui_settings_money_ticket_and_preparation_timer
+    self.assertEqual(app.metric_values['misses'].get(),'Ch\u01b0a r�')
+AssertionError: '0' != 'Ch\u01b0a r�'
+- 0
++ Ch\u01b0a r�
+
+
+----------------------------------------------------------------------
+Ran 87 tests in 49.562s
+
+FAILED (failures=1)

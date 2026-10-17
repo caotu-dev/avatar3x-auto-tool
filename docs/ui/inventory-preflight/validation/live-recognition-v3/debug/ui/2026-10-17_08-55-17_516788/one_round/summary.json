@@ -1,0 +1,12 @@
+{
+  "status": "STOPPED",
+  "reason": "Chưa thấy ghế trống đủ tin cậy (có thể bị người chơi che); không bấm ghế mù",
+  "rounds": [],
+  "counts": {},
+  "casts": 0,
+  "area": "ca_noc",
+  "bites": 0,
+  "misses": 0,
+  "misses_confirmed": 0,
+  "fish_counts": {}
+}

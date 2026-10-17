@@ -1,0 +1,17 @@
+{
+  "ready": false,
+  "reason": "Hết thời gian xác nhận đóng popup / Xong / Quăng câu; không bấm lại",
+  "taps": [
+    [
+      958,
+      557
+    ]
+  ],
+  "replayed_real_loading_frames": 3,
+  "casts": 0,
+  "purchases": 0,
+  "resumed_state": "WAITING",
+  "scene_confirmed": true,
+  "popup_closed": true,
+  "cleanup_helper_ready": false
+}

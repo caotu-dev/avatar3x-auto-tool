@@ -1,0 +1,2 @@
+{"event": "TAP", "image": "000_TAP.png", "action": "Chơi tiếp sau mất phiên", "point": [656, 560]}
+{"event": "RECONNECTED", "image": "001_RECONNECTED.png", "attempts": 1}

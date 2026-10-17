@@ -1,0 +1,59 @@
+{
+  "seconds": 52.942441099999996,
+  "area_confirmed": 7.207447300002968,
+  "taps": [
+    {
+      "seconds": 1.3047270000024582,
+      "point": [
+        12,
+        603
+      ]
+    },
+    {
+      "seconds": 8.336002400006691,
+      "point": [
+        1200,
+        787
+      ]
+    },
+    {
+      "seconds": 11.442288100006408,
+      "point": [
+        799,
+        845
+      ]
+    },
+    {
+      "seconds": 49.956807400005346,
+      "point": [
+        160,
+        650
+      ]
+    },
+    {
+      "seconds": 51.12416200000007,
+      "point": [
+        1465,
+        845
+      ]
+    }
+  ],
+  "result": {
+    "status": "COMPLETE",
+    "reason": "Đã kết thúc 1 lượt; màn hình sẵn sàng Quăng câu",
+    "rounds": [
+      {
+        "outcome": "SUCCESS",
+        "reason": "Đã thấy popup nhận cá",
+        "casts": 1,
+        "drags": 5,
+        "confirmed": 3,
+        "fish_species": "ca_ro",
+        "fish_name": "Cá rô",
+        "fish_confidence": 1.0,
+        "area": "ca_ro",
+        "bite_observed": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "tickets": {
+    "ca_ro": {
+      "status": "missing",
+      "expires_on": null
+    },
+    "ca_noc": {
+      "status": "missing",
+      "expires_on": null
+    },
+    "ca_map": {
+      "status": "missing",
+      "expires_on": null
+    },
+    "dock": {
+      "status": "active",
+      "expires_on": "2026-10-16"
+    }
+  },
+  "bait_stocks": {
+    "ecological": 0,
+    "dock": 0
+  },
+  "scan_complete": true,
+  "wallet": {
+    "coins": 269749,
+    "gold": null
+  },
+  "inventory_observed_at": "2026-10-15T20:17:38.541018"
+}

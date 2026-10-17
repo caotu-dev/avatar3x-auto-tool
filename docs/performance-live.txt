@@ -1,0 +1,25 @@
+[DI CHUYỂN] Sang khu cá rô: (12, 603)
+AREA_CONFIRMED 7.207447300002968
+[ACTION] Vào ghế: 1200, 787
+[SESSION] Lượt 1/1
+[ACTION] Quăng câu: quăng một lượt
+[FISHING] UNKNOWN
+[FISHING] WAITING
+[FISHING] FISHING
+[ACTION] Kéo S5 → T1 (0.93)
+[ACTION] Kéo S2 → T2 (0.92)
+[ACTION] Thử kéo lại T2: ô chưa đổi
+[ACTION] Kéo S6 → T3 (0.89)
+[ACTION] Kéo S4 → T4 (0.82)
+[FISHING] UNKNOWN
+[FISHING] SUCCESS
+[CÁ] Cá rô (1.00)
+[BOT] SUCCESS: Đã thấy popup nhận cá
+[BOT] Báo cáo: docs\performance-live\round_001
+[ACTION] Đóng popup nhận cá
+[ACTION] Xong
+[SESSION] COMPLETE: Đã kết thúc 1 lượt; màn hình sẵn sàng Quăng câu
+[SESSION] Báo cáo: docs\performance-live
+[SESSION] Kết quả: {'SUCCESS': 1}
+[SESSION] Cá đã nhận: {'Cá rô': 1}
+SessionResult(status='COMPLETE', reason='Đã kết thúc 1 lượt; màn hình sẵn sàng Quăng câu', rounds=(TrialResult(outcome='SUCCESS', reason='Đã thấy popup nhận cá', casts=1, drags=5, confirmed=3, fish_species='ca_ro', fish_name='Cá rô', fish_confidence=1.0, area='ca_ro', bite_observed=True),))

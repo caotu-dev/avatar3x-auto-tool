@@ -1,0 +1,5 @@
+[DI CHUYỂN] Đóng thông báo hết mồi: (798, 581)
+[DI CHUYỂN] Rời ghế: (1465, 845)
+[DI CHUYỂN] Về trung tâm: (875, 848)
+[DI CHUYỂN] Mở shop: (1332, 464)
+[DI CHUYỂN] Đóng menu shop sau kiểm thử: (200, 650)

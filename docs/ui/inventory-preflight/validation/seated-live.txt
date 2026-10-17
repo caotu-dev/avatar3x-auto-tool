@@ -1,0 +1,2 @@
+[ACTION] Không: đóng xác nhận thoát
+(True, 'Đã thấy Quăng câu')

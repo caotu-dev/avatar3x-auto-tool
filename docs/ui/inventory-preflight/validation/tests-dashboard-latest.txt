@@ -1,0 +1,12 @@
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+[DI CHUY\u1ec2N] Ch\u01a1i ti\u1ebfp sau m\u1ea5t phi\xean: (659, 562)
+----------------------------------------------------------------------
+Ran 23 tests in 5.416s
+
+OK

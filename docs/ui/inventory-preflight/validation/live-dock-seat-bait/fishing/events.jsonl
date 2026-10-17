@@ -1,0 +1,7 @@
+{"event": "PREPARE_READY", "elapsed": 0.906, "after_round": 0, "image": "000_PREPARE_READY.png"}
+{"event": "PREPARE_SUCCESS", "elapsed": 28.25, "after_round": 1, "image": "001_PREPARE_SUCCESS.png"}
+{"event": "DISMISS_POPUP", "elapsed": 29.093, "after_round": 1, "image": "002_DISMISS_POPUP.png", "point": [160, 180]}
+{"event": "PREPARE_FINISH", "elapsed": 30.187, "after_round": 1, "image": "003_PREPARE_FINISH.png"}
+{"event": "FINISH", "elapsed": 31.218, "after_round": 1, "image": "004_FINISH.png", "point": [1465, 845], "attempt": 1}
+{"event": "PREPARE_READY", "elapsed": 32.343, "after_round": 1, "image": "005_PREPARE_READY.png"}
+{"event": "STOP", "elapsed": 33.343, "after_round": 1, "image": "006_STOP.png", "status": "COMPLETE", "reason": "Đã kết thúc 1 lượt; màn hình sẵn sàng Quăng câu"}

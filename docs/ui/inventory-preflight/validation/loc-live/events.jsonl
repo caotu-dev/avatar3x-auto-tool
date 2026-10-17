@@ -1,0 +1,6 @@
+{"event": "TAP", "image": "000_TAP.png", "action": "Mở shop", "point": [1356, 425]}
+{"event": "TAP", "image": "001_TAP.png", "action": "Cửa Hàng Cá", "point": [799, 220]}
+{"event": "TAP", "image": "002_TAP.png", "action": "Chọn vé để kiểm tra", "point": [594, 396]}
+{"event": "TAP", "image": "003_TAP.png", "action": "Mở xác nhận, không thanh toán", "point": [1089, 632]}
+{"event": "TAP", "image": "004_TAP.png", "action": "Hủy kiểm thử mua vé", "point": [933, 620]}
+{"event": "TAP", "image": "005_TAP.png", "action": "Đóng shop sau kiểm thử", "point": [200, 650]}

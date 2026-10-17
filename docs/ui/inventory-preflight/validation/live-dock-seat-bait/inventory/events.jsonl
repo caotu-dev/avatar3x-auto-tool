@@ -1,0 +1,16 @@
+{"event": "TAP", "image": "000_TAP.png", "action": "MENU → rương đồ", "point": [96, 95]}
+{"event": "TAP", "image": "001_TAP.png", "action": "Mở rương đồ", "point": [99, 516]}
+{"event": "TAP", "image": "002_TAP.png", "action": "Đọc thông tin item trong rương", "point": [1066, 629]}
+{"event": "INVENTORY_TICKET", "image": "003_INVENTORY_TICKET.png", "ticket": "dock", "status": "active", "expires_on": "2026-10-16"}
+{"event": "TAP", "image": "004_TAP.png", "action": "Đóng rương đồ", "point": [1510, 35]}
+{"event": "TAP", "image": "005_TAP.png", "action": "Mở shop Bến Tàu", "point": [810, 670]}
+{"event": "TAP", "image": "006_TAP.png", "action": "Cửa hàng Bến Tàu", "point": [799, 326]}
+{"event": "TAP", "image": "007_TAP.png", "action": "Chọn Mồi Câu Cá Trâm", "point": [731, 262]}
+{"event": "TAP", "image": "008_TAP.png", "action": "Mua mồi bến tàu", "point": [1089, 632]}
+{"event": "TAP", "image": "009_TAP.png", "action": "Nhập số lượng mồi", "point": [798, 500]}
+{"event": "TAP", "image": "010_TAP.png", "action": "OK số lượng", "point": [1537, 851]}
+{"event": "PURCHASE_PENDING", "image": "011_PURCHASE_PENDING.png", "quantity": 50}
+{"event": "TAP", "image": "012_TAP.png", "action": "Thanh toán mồi bến tàu", "point": [663, 620]}
+{"event": "DOCK_PURCHASE_CONFIRMED", "image": "013_DOCK_PURCHASE_CONFIRMED.png", "quantity": 50}
+{"event": "TAP", "image": "014_TAP.png", "action": "Đóng biên nhận", "point": [798, 554]}
+{"event": "TAP", "image": "015_TAP.png", "action": "Đóng shop bến tàu", "point": [200, 650]}

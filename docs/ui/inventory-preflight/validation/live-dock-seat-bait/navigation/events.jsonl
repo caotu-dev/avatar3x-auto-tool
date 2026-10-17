@@ -1,0 +1,12 @@
+{"event": "TIMEOUT", "image": "000_TIMEOUT.png", "expected": "icon suburb"}
+{"event": "PAN_WORLD", "image": "001_PAN_WORLD.png", "direction": [800, 230, 800, 760]}
+{"event": "TIMEOUT", "image": "002_TIMEOUT.png", "expected": "icon suburb"}
+{"event": "PAN_WORLD", "image": "003_PAN_WORLD.png", "direction": [800, 230, 800, 760]}
+{"event": "TIMEOUT", "image": "004_TIMEOUT.png", "expected": "icon suburb"}
+{"event": "PAN_WORLD", "image": "005_PAN_WORLD.png", "direction": [300, 500, 1350, 500]}
+{"event": "TAP", "image": "006_TAP.png", "action": "Vào suburb", "point": [300, 197]}
+{"event": "ARRIVED", "image": "007_ARRIVED.png", "location": "suburb"}
+{"event": "TAP", "image": "008_TAP.png", "action": "Vào bãi biển", "point": [647, 440]}
+{"event": "TAP", "image": "009_TAP.png", "action": "Vào Bến tàu", "point": [35, 815]}
+{"event": "TAP", "image": "010_TAP.png", "action": "Đóng giới thiệu Bến tàu", "point": [796, 581]}
+{"event": "ARRIVED", "image": "011_ARRIVED.png", "location": "dock"}

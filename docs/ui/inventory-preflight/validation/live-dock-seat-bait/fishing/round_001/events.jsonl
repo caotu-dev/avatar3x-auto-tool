@@ -1,0 +1,16 @@
+{"event": "CAST", "elapsed": 0.875, "image": "000_CAST.png", "state": "READY"}
+{"event": "UNKNOWN", "elapsed": 1.828, "image": "001_UNKNOWN.png"}
+{"event": "WAITING", "elapsed": 2.781, "image": "002_WAITING.png"}
+{"event": "FISHING", "elapsed": 12.296, "image": "003_FISHING.png"}
+{"event": "DRAG", "elapsed": 14.5, "image": "004_DRAG.png", "source": 1, "target": 1, "confidence": 0.93}
+{"event": "CONFIRMED", "elapsed": 16.671, "image": "005_CONFIRMED.png", "target": 1}
+{"event": "DRAG", "elapsed": 16.812, "image": "006_DRAG.png", "source": 4, "target": 2, "confidence": 0.895}
+{"event": "CONFIRMED", "elapsed": 19.031, "image": "007_CONFIRMED.png", "target": 2}
+{"event": "DRAG", "elapsed": 19.156, "image": "008_DRAG.png", "source": 3, "target": 3, "confidence": 0.781}
+{"event": "CONFIRMED", "elapsed": 21.25, "image": "009_CONFIRMED.png", "target": 3}
+{"event": "DRAG", "elapsed": 21.375, "image": "010_DRAG.png", "source": 2, "target": 4, "confidence": 0.906}
+{"event": "CONFIRMED", "elapsed": 23.531, "image": "011_CONFIRMED.png", "target": 4}
+{"event": "DRAG", "elapsed": 23.656, "image": "012_DRAG.png", "source": 2, "target": 5, "confidence": 0.875}
+{"event": "UNKNOWN", "elapsed": 24.906, "image": "013_UNKNOWN.png"}
+{"event": "SUCCESS", "elapsed": 25.656, "image": "014_SUCCESS.png"}
+{"event": "STOP", "elapsed": 25.671, "image": "015_STOP.png", "outcome": "SUCCESS", "reason": "Đã thấy popup nhận cá", "casts": 1, "drags": 5, "confirmed": 4, "fish_species": "ca_vang", "fish_name": "Cá vàng", "fish_confidence": 1.0, "area": "dock", "bite_observed": true}

@@ -1,0 +1,10 @@
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+[DI CHUY\u1ec2N] K\xe9o camera \u0111\u1ec3 t\xecm l\u1ed1i v\u1ec1 trung t\xe2m
+----------------------------------------------------------------------
+Ran 16 tests in 25.394s
+
+OK

@@ -1,0 +1,26 @@
+[
+  {
+    "width": 1536,
+    "height": 960,
+    "content": 540,
+    "available": 730
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "content": 540,
+    "available": 670
+  },
+  {
+    "width": 1280,
+    "height": 800,
+    "content": 540,
+    "available": 574
+  },
+  {
+    "width": 1024,
+    "height": 720,
+    "content": 516,
+    "available": 522
+  }
+]

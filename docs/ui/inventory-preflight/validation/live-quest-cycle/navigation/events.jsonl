@@ -1,0 +1,3 @@
+{"event": "TIMEOUT", "image": "000_TIMEOUT.png", "expected": "icon fishing"}
+{"event": "PAN_WORLD", "image": "001_PAN_WORLD.png", "direction": [800, 230, 800, 760]}
+{"event": "TIMEOUT", "image": "002_TIMEOUT.png", "expected": "icon fishing"}

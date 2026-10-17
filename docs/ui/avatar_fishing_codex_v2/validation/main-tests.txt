@@ -1,0 +1,14 @@
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 2/3
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 2/3
+[DI CHUY\u1ec2N] V\u1eabn \u1edf b\u1ea3n \u0111\u1ed3; th\u1eed v\xe0o fishing l\u1ea7n 3/3
+.................................................................................................................................can't invoke "event" command: application has been destroyed
+    while executing
+"event generate $w <<ThemeChanged>>"
+    (procedure "ttk::ThemeChanged" line 6)
+    invoked from within
+"ttk::ThemeChanged"
+.........................
+----------------------------------------------------------------------
+Ran 154 tests in 77.197s
+
+OK
