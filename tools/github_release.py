@@ -66,7 +66,17 @@ def main():
                 print(json.dumps([dict(name=j['name'], conclusion=j['conclusion'],
                                        failed_steps=[s['name'] for s in j['steps'] if s.get('conclusion') == 'failure']) for j in jobs], indent=2))
     else:
-        release = api('/releases/tags/' + args.tag)
+        try:
+            release = api('/releases/tags/' + args.tag)
+        except urllib.error.HTTPError as exc:
+            if exc.code != 404:
+                raise
+            # The by-tag endpoint can hide unpublished drafts. Maintainers
+            # can still find them in the authenticated release listing.
+            release = next((r for r in api('/releases?per_page=100')
+                            if r['tag_name'] == args.tag), None)
+            if release is None:
+                raise RuntimeError('Release/draft not found for ' + args.tag) from None
         assets = release['assets']
         if args.command == 'publish':
             if not args.notes:
