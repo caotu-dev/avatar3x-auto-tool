@@ -8,13 +8,30 @@ from fishing.detector import FishingDetector
 from fishing.dock import DockDetector
 from fishing.states import FishingState
 from vision.layout import find_target_board
-from vision.matcher import find_template
+from vision.matcher import find_template, MatchResult
 
 
 FIXTURES = Path(__file__).parent / 'fixtures'
 
 
 class DetectorFastPathTests(unittest.TestCase):
+    def test_duplicate_puffer_sign_score_cannot_hide_verified_chairs(self):
+        detector=FishingDetector(area='ca_noc')
+        # Same fixture contains two nearly equal signs. The irrelevant left
+        # sign can win a full-screen FFT on another CPU; it has no chairs.
+        def biased(screen,template,threshold=.9,roi=None,contrast_invariant=False):
+            if template is detector.room_sign_template:
+                if roi is None or roi.x == 0:
+                    return MatchResult(73,360,60,18,1.0)
+                return MatchResult(1225,360,60,18,.99993)
+            return find_template(screen,template,threshold,roi,contrast_invariant)
+        with patch('fishing.detector.find_template',side_effect=biased):
+            observation=detector.detect(self.image('puffer_idle.png'))
+        self.assertEqual(observation.state,FishingState.IDLE)
+        chairs=[match for key,match in observation.matches.items() if key.startswith('chair_')]
+        self.assertGreaterEqual(len(chairs),2)
+        self.assertTrue(all(match.x>1000 for match in chairs))
+
     def image(self, filename):
         return cv2.imread(str(FIXTURES / filename))
 

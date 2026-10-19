@@ -13,6 +13,16 @@ Có thông báo Tk ThemeChanged khi hủy test roots và traceback chẩn đoán
 của watchdog ở một số test dài; kết quả cuối cùng là OK, không phải lỗi startup.
 File log thô được giữ riêng trên máy phát triển, không đóng gói log cá nhân.
 
+### Khác biệt phát hiện trên runner
+
+Lần CI đầu tiên của bản chuẩn bị có 1/380 test thất bại tại puffer_idle, dù local
+pass: hai biển phòng có điểm gần như bằng nhau, và biển không có ghế có thể
+thắng do sai số số thực khác CPU. Không bỏ qua test hoặc hạ ngưỡng. Bộ dò hiện
+kiểm tra cả hai bờ bằng ROI chồng lấn, rồi chọn nhóm có nhiều ghế thật được xác
+nhận hơn. Regression mới buộc biển không có ghế đạt điểm cao hơn; 40 tests liên
+quan khu câu/scene/ghế/fast path pass sau sửa. Suite đầy đủ có thêm test này
+(381 tests); kết quả cuối cùng của tag nằm ở workflow Windows release.
+
 ## Visual QA
 
 - Dashboard, Chọn nhiệm vụ và Thiết lập được chụp từ các widget thật bằng

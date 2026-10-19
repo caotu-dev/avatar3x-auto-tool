@@ -189,26 +189,42 @@ class FishingDetector:
             chair_regions = tuple(ROI(.67, (y - 30) / 900, .075, 60 / 900) for y in (496, 570, 644))
             # Changing rooms can center a different pier. Derive both sides from
             # the visible sign instead of assuming a fixed camera offset.
-            sign = find_template(gray,self.room_sign_template,threshold=.98,
-                                 contrast_invariant=True) if self.room_sign_template is not None else None
-            if sign is not None:
-                chair_regions = tuple(ROI((sign.center[0]+dx-55)/1600,
-                                          (sign.y+dy-25)/900,110/1600,65/900)
-                                      for dx in (-140,145) for dy in (142,215,288))
-                chair_regions = tuple(r for r in chair_regions
-                                      if 0 <= r.x and r.x+r.width <= 1 and 0 <= r.y and r.y+r.height <= 1)
+            # Two visually identical signs can have scores differing only by
+            # floating-point noise on different CPUs. Inspect both banks and
+            # select by verified chairs, rather than the highest sign score.
+            signs = []
+            if self.room_sign_template is not None:
+                for region in (ROI(0,0,.55,1),ROI(.45,0,.55,1)):
+                    sign=find_template(gray,self.room_sign_template,threshold=.98,
+                                       roi=region,contrast_invariant=True)
+                    if sign is not None and (sign.x,sign.y) not in {(s.x,s.y) for s in signs}:
+                        signs.append(sign)
+            sign_groups = []
+            for sign in signs:
+                regions = tuple(ROI((sign.center[0]+dx-55)/1600,
+                                    (sign.y+dy-25)/900,110/1600,65/900)
+                                for dx in (-140,145) for dy in (142,215,288))
+                sign_groups.append(tuple(r for r in regions
+                                   if 0 <= r.x and r.x+r.width <= 1 and 0 <= r.y and r.y+r.height <= 1))
         elif self.area == "ca_map":
             chair_regions = tuple(ROI(x, (y - 30) / 900, .075, 60 / 900)
                                   for x in (.70, .34) for y in (574, 645, 716))
         else:
             chair_regions = self.CHAIR_REGIONS
-        for index, roi in enumerate(chair_regions):
-            candidates = [find_template(gray, template, threshold=.94, roi=roi,
-                                        contrast_invariant=True)
-                          for template in self.chair_templates]
-            found = [match for match in candidates if match is not None]
-            if found:
-                matches[f"chair_{index + 1}"] = max(found, key=lambda match: match.confidence)
+        chair_groups = sign_groups if self.area == 'ca_noc' and sign_groups else (chair_regions,)
+        verified_chairs = {}
+        for regions in chair_groups:
+            group = {}
+            for index, roi in enumerate(regions):
+                candidates = [find_template(gray, template, threshold=.94, roi=roi,
+                                            contrast_invariant=True)
+                              for template in self.chair_templates]
+                found = [match for match in candidates if match is not None]
+                if found:
+                    group[f"chair_{index + 1}"] = max(found, key=lambda match: match.confidence)
+            if len(group) > len(verified_chairs):
+                verified_chairs = group
+        matches.update(verified_chairs)
         pond = screen[515:700, 330:400] if self.area == "ca_noc" else screen[558:756, 80:400]
         pond_hsv = cv2.cvtColor(pond, cv2.COLOR_BGR2HSV)
         water = cv2.inRange(pond_hsv, (80, 60, 35), (115, 255, 255))
