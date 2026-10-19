@@ -29,5 +29,7 @@ class RoomTests(unittest.TestCase):
                         MatchResult(80, 85, 20, 20, 1)])
         with tempfile.TemporaryDirectory(dir=ROOT/'debug') as folder:
             travel = TravelController(Device(), Path(folder), sleep=lambda _: None)
-            found = travel.wait(lambda _: next(samples), 'icon', timeout=2)
+            # This unit exercises coordinate stability without screen images.
+            found = travel.wait(lambda _: next(samples), 'icon', timeout=2,
+                                handle_interruptions=False)
             self.assertEqual(found.y, 85)

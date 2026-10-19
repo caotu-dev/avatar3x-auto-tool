@@ -9,7 +9,7 @@ from typing import Callable
 import cv2
 import numpy as np
 
-from adb.screenshot import save_debug_screenshot
+from adb.screenshot import save_event_screenshot
 from debug.notifications import notify_out_of_bait
 from config.settings import ROOT, SessionSettings, TrialSettings
 from .bot import Detector, Device, OneRoundBot, Solver, TrialResult
@@ -72,7 +72,8 @@ class FishingSession:
         self.output.mkdir(parents=True, exist_ok=True)
         filename = f"{self.event_index:03d}_{name}.png"
         if self.last_screen is not None:
-            filename=save_debug_screenshot(self.last_screen, self.output / filename).name
+            captured=save_event_screenshot(self.last_screen, self.output / filename, name, details)
+            filename=captured.name if captured is not None else None
         with (self.output / "events.jsonl").open("a", encoding="utf-8") as file:
             file.write(json.dumps({"event": name, "elapsed": round(self.clock() - self.started, 3),
                                    "after_round": len(self.results), "image": filename,

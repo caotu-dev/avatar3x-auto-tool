@@ -90,7 +90,7 @@ class MapNavigator(TravelController):
                     raise RuntimeError("Chưa thấy lối ra phòng Hành chính")
                 self.tap((arrows[0][0], min(899, arrows[0][1] + 35)), "Ra ngoài Hành chính")
                 self.wait(lambda a: self.location(a) == "entertainment" or self.match(a, "exit_question"),
-                          "xác nhận rời Hành chính")
+                          "xác nhận rời Hành chính",handle_interruptions=False)
             if self.match(self.screen, "exit_question"):
                 self.button("exit_yes", "Có: rời Hành chính")
             self.wait(lambda a: self.location(a) == "entertainment", "ngoài đường Khu giải trí")

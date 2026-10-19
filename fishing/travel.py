@@ -7,7 +7,7 @@ import numpy as np
 from pathlib import Path
 from typing import Callable
 
-from adb.screenshot import save_debug_screenshot
+from adb.screenshot import save_event_screenshot
 from vision.matcher import MatchResult
 from .bot import OneRoundBot
 from .detector import FishingDetector
@@ -26,12 +26,14 @@ class TravelController:
         self.index = 0
         self.bait_purchased = 0
         self.on_event = on_event
+        self._interruption_detector = None
         self.output.mkdir(parents=True, exist_ok=True)
 
     def event(self, name: str, **details) -> None:
         filename = f"{self.index:03d}_{name}.png"
         if self.screen is not None:
-            filename=save_debug_screenshot(self.screen, self.output / filename).name
+            captured=save_event_screenshot(self.screen, self.output / filename, name, details)
+            filename=captured.name if captured is not None else None
         with (self.output / "events.jsonl").open("a", encoding="utf-8") as stream:
             stream.write(json.dumps({"event": name, "image": filename, **details}, ensure_ascii=False) + "\n")
         self.index += 1
@@ -39,12 +41,62 @@ class TravelController:
             self.on_event(name, details)
 
     def wait(self, predicate, label: str, timeout: float = 45, observations: int = 2,
-             position_tolerance: tuple[int, int] = (8, 8)):
+             position_tolerance: tuple[int, int] = (8, 8), handle_interruptions: bool = True):
         deadline = self.clock() + timeout
         previous = None
         stable = 0
-        while self.clock() < deadline:
+        loading_since=None
+        overlay_key=None
+        overlay_stable=0
+        overlay_sent=False
+        overlay_attempts=0
+        overlay_sent_at=None
+        overlay_since=None
+        while self.clock() < deadline or loading_since is not None:
             self.screen = self.device.screenshot()
+            if handle_interruptions:
+                if self._interruption_detector is None:
+                    self._interruption_detector=FishingDetector()
+                interruption=self._interruption_detector.interruption(self.screen)
+                if interruption is not None and interruption.state is FishingState.LOADING:
+                    if loading_since is None:
+                        self.event('WAIT_LOADING',expected=label)
+                        loading_since=self.clock()
+                    previous=None;stable=0;overlay_key=None;overlay_stable=0;overlay_sent=False
+                    overlay_attempts=0;overlay_sent_at=None
+                    self.sleep(.1)
+                    continue
+                if loading_since is not None:
+                    deadline+=self.clock()-loading_since
+                    loading_since=None
+                point=None;kind=None
+                if interruption is not None and interruption.state is FishingState.EXIT_CONFIRM:
+                    point=interruption.matches['exit_no'].center;kind='exit'
+                elif self.world.player_menu(self.screen):
+                    kind='player'
+                    point=self.world.player_menu_dismiss_point(self.screen)
+                if kind:
+                    key=(kind,point)
+                    overlay_stable=overlay_stable+1 if key==overlay_key else 1
+                    if key!=overlay_key:
+                        overlay_sent=False;overlay_attempts=0;overlay_sent_at=None
+                    overlay_key=key
+                    if overlay_since is None:overlay_since=self.clock()
+                    if (point and overlay_stable>=2 and overlay_attempts<3
+                            and (not overlay_sent or self.clock()-overlay_sent_at>=3)):
+                        self.tap(point,'Không: giữ game khi điều hướng' if kind=='exit' else 'Đóng menu người chơi đang che đường/shop')
+                        overlay_sent=True
+                        overlay_attempts+=1;overlay_sent_at=self.clock();overlay_stable=0
+                    previous=None;stable=0
+                    self.sleep(.02)
+                    continue
+                if overlay_since is not None:
+                    # Allow the requested screen to settle after a verified
+                    # dismissal, without granting stuck overlays infinite time.
+                    deadline+=min(10,self.clock()-overlay_since)
+                    overlay_since=None
+                overlay_key=None;overlay_stable=0;overlay_sent=False
+                overlay_attempts=0;overlay_sent_at=None
             value = predicate(self.screen)
             key = value.center if isinstance(value, MatchResult) else value
             same = key == previous
@@ -65,7 +117,8 @@ class TravelController:
         self.device.tap(*point)
 
     def button(self, name: str, label: str):
-        match = self.wait(lambda image: self.world.match(image, name), label)
+        match = self.wait(lambda image: self.world.match(image, name), label,
+                          handle_interruptions=name not in ('exit_yes','exit_no'))
         self.tap(match.center, label)
 
     def leave_chair(self, area: str, _late_popup_retry: bool = True):
@@ -75,7 +128,8 @@ class TravelController:
                 from .dock import DockDetector
                 return DockDetector().detect(image).confirmed and self.world.match(image,'menu') is not None
             return self.world.map_name(image) == area
-        self.screen = self.device.screenshot()
+        self.wait(lambda image: True,'màn hình trước khi rời ghế',observations=1,timeout=10)
+        if self.world.map_name(self.screen)=='center':return
         detection = detector.detect(self.screen)
         if detection.state is FishingState.SUCCESS:
             point = popup_outside_point(self.screen)
@@ -130,9 +184,12 @@ class TravelController:
             self.leave_chair(area,_late_popup_retry=False)
 
     def center(self, area: str | None = None):
-        self.screen = self.device.screenshot()
-        if self.world.map_name(self.screen) == "center":
+        self.wait(lambda image: True,'màn hình trước khi về trung tâm',observations=1,timeout=10)
+        actual=self.world.map_name(self.screen)
+        if actual == "center":
             return
+        if actual in ('ca_ro','ca_noc','ca_map'):
+            area=actual
         if area is None:
             area = self.world.map_name(self.screen, require_menu=False)
         if area not in ("ca_ro", "ca_noc", "ca_map"):
@@ -178,11 +235,12 @@ class TravelController:
 
     def open_shop(self):
         for attempt in range(3):
-            self.screen=self.device.screenshot()
+            self.wait(lambda image:True,'màn hình trước khi mở shop',observations=1,timeout=10)
             if self.world.match(self.screen,'shop_menu'):
                 return
             sign = self.wait(lambda image: self.world.match(image, "shop_sign"), "biển SHOP",timeout=10)
-            self.tap((sign.center[0] - 12, sign.center[1] + 123), "Mở shop")
+            offset=(-12,-65,45)[attempt]
+            self.tap((sign.center[0] + offset, sign.center[1] + 123), "Mở shop")
             try:
                 self.wait(lambda image: self.world.match(image, "shop_menu"), "menu shop",timeout=8)
                 return
@@ -237,11 +295,23 @@ class TravelController:
         if sell:
             self.open_shop()
             self.button("sell", "Bán cá")
-            response = self.wait(lambda image: self.world.match(image, "ok")
-                                 or ("center" if self.world.map_name(image) == "center" else None),
-                                 "kết thúc thao tác bán cá", observations=1)
-            if isinstance(response, MatchResult):
+            # The shop disappears before the sale receipt arrives. A transient
+            # center frame is not evidence that the sale has finished.
+            response = self.wait(lambda image: self.world.match(image, "ok"),
+                                 "OK kết quả bán cá")
+            for attempt in range(3):
                 self.tap(response.center, "OK thông báo bán cá")
+                try:
+                    self.wait(lambda image: not self.world.match(image, "ok")
+                              and self.world.map_name(image) == "center",
+                              "trung tâm sau đóng thông báo bán cá", timeout=10)
+                    break
+                except RuntimeError:
+                    if attempt == 2:
+                        raise
+                    # Retrying a verified dismissal is safe; never sell again.
+                    response = self.wait(lambda image: self.world.match(image, "ok"),
+                                         "OK bán cá còn mở để thử đóng lại", timeout=10)
             self.event("SALE_CONFIRMED")
         if not buy:
             self.wait(lambda image: self.world.map_name(image) == "center", "trung tâm sau bán")

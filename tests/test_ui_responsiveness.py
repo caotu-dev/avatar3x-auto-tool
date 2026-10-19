@@ -129,7 +129,7 @@ class ResponsivenessTests(unittest.TestCase):
             self.assertEqual(configure.call_count, 2)
         dialog.cancel()
 
-    def test_small_dashboard_has_visible_status_and_all_fish_without_page_scroll(self):
+    def test_small_dashboard_has_visible_status_and_all_fish_with_reachable_scroll(self):
         from fishing.catch import SPECIES
         from fishing.inventory import TICKETS
         self.root.attributes('-alpha', 0)
@@ -144,8 +144,10 @@ class ResponsivenessTests(unittest.TestCase):
         self.root.update()
         self.assertEqual(len(self.app.table.get_children()), 13)
         self.assertTrue(self.app.status_label.winfo_ismapped())
-        self.assertEqual(self.app.workspace_scrollbar.winfo_manager(), '')
-        self.assertLessEqual(self.app.content.winfo_reqheight(), self.app.workspace_canvas.winfo_height())
+        self.assertEqual(self.app.workspace_scrollbar.winfo_manager(), 'pack')
+        self.app.workspace_canvas.yview_moveto(1)
+        self.root.update()
+        self.assertLessEqual(self.app.session_controls.winfo_rooty()+self.app.session_controls.winfo_height(), self.app.workspace_canvas.winfo_rooty()+self.app.workspace_canvas.winfo_height()+2)
 
 
 if __name__ == '__main__':

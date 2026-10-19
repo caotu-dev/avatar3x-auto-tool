@@ -71,6 +71,31 @@ class WorldDetector:
                 points.append((max(8, x + w // 2), 540 + y + h // 2))
         return sorted(points)
 
+    def player_menu(self, screen):
+        if screen.shape != (900,1600,3):return False
+        gray=cv2.cvtColor(screen,cv2.COLOR_BGR2GRAY)
+        # Two different native action glyphs, not a lone round UI border.
+        found=[]
+        for name in ('player_message','player_punch'):
+            template=self.templates.get(name)
+            if template is None:return False
+            match=find_template(gray,template,threshold=.98,contrast_invariant=True,
+                                roi=ROI(.5,.1,.5,.8))
+            if match is None:return False
+            found.append(match)
+        return abs(found[0].center[1]-found[1].center[1])<30 and abs(found[0].center[0]-found[1].center[0])>80
+
+    def player_menu_dismiss_point(self, screen):
+        if not self.player_menu(screen):return None
+        # Observed player menu occupies the right side. Use only visibly empty
+        # pavement/water on the left; never Back (which can request game exit).
+        for x,y in ((250,740),(350,740),(450,740),(200,650)):
+            patch=cv2.cvtColor(screen[y-20:y+20,x-20:x+20],cv2.COLOR_BGR2HSV)
+            pavement=cv2.inRange(patch,(0,0,60),(179,55,240))
+            water=cv2.inRange(patch,(80,60,35),(115,255,255))
+            if np.mean((pavement|water)>0)>.9:return (x,y)
+        return None
+
     def map_name(self, screen: np.ndarray, require_menu: bool = True) -> str | None:
         if self.match(screen, "shop_menu") or self.match(screen, "fish_shop"):
             return None

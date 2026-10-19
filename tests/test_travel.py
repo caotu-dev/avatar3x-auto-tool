@@ -107,7 +107,7 @@ class TravelTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as folder,redirect_stdout(StringIO()):
             controller=TravelController(device,Path(folder),clock.read,clock.sleep)
             controller.open_shop()
-        self.assertEqual(device.taps,[(1011,425)]*2)
+        self.assertEqual(device.taps,[(1011,425),(958,425)])
 
     def test_own_avatar_occludes_exit_until_it_moves_to_pavement(self):
         blocked=cv2.imread(str(Path(__file__).parent/'fixtures/center_exit_occluded.png'))
@@ -140,6 +140,7 @@ class TravelTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=Path(__file__).parent) as folder,redirect_stdout(StringIO()):
             controller=TravelController(device,Path(folder),clock.read,clock.sleep)
             controller.world=Mock();controller.event=Mock();controller.uncover_center_exit=Mock(return_value=False)
+            controller.world.player_menu.return_value=False
             controller.world.map_name.side_effect=lambda a:'ca_noc' if device.taps else 'center'
             controller.world.arrows.side_effect=lambda a:[(1535,603)] if device.pans==3 else []
             controller.enter('ca_noc')
@@ -154,7 +155,12 @@ class TravelTests(unittest.TestCase):
             controller.world=Mock();controller.world.map_name.return_value='ca_noc'
             controller.world.arrows.side_effect=lambda a: [(12,570)] if a=='edge' else []
             from vision.matcher import MatchResult
-            controller.wait=Mock(return_value=MatchResult(11,569,2,2,1.))
+            def wait(predicate,label,**kwargs):
+                if label.startswith('màn hình'):
+                    controller.screen=device.screenshot()
+                    return True
+                return MatchResult(11,569,2,2,1.)
+            controller.wait=Mock(side_effect=wait)
             controller.center('ca_noc')
             device.swipe.assert_called_once_with(300,650,850,650,500)
             controller.tap.assert_called_once_with((12,570),'Về trung tâm')
@@ -165,6 +171,8 @@ class TravelTests(unittest.TestCase):
             controller=TravelController(device,Path(folder),clock.read,clock.sleep)
             controller.leave_chair=Mock();controller.event=Mock();controller.tap=Mock()
             controller.world=Mock();controller.world.map_name.return_value='ca_noc';controller.world.arrows.return_value=[]
+            controller.world.player_menu.return_value=False
+            controller._interruption_detector=Mock();controller._interruption_detector.interruption.return_value=None
             with self.assertRaisesRegex(RuntimeError,'Không thấy mũi tên'):
                 controller.center('ca_noc')
             self.assertEqual(device.swipe.call_count,5);controller.tap.assert_not_called()

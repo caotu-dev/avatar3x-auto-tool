@@ -99,6 +99,35 @@ class FishingDetector:
             if image is not None:
                 self.chair_templates.append(image[:15])
 
+    def interruption(self, screen: NDArray[np.uint8]) -> Detection | None:
+        """Cheap scene-independent guard for navigation/shop waits."""
+        if screen.shape != (900, 1600, 3):
+            return None
+        gray=cv2.cvtColor(screen,cv2.COLOR_BGR2GRAY)
+        for template in (self.loading_template,self.seated_loading_template):
+            if template is not None:
+                match=find_template(gray,template,threshold=.98,
+                                    roi=ROI(.25,.35,.5,.3),contrast_invariant=True)
+                if match:return Detection(FishingState.LOADING,{'loading':match})
+        matches={}
+        for name in ('exit_no','exit_question'):
+            for template in (self.templates[name],self.localized_templates.get(name)):
+                if template is None:continue
+                match=find_template(gray,cv2.cvtColor(template,cv2.COLOR_BGR2GRAY),
+                                    threshold=.98,roi=self.REGIONS[name],contrast_invariant=True)
+                if match:
+                    matches[name]=match
+                    break
+            if name=='exit_no' and name not in matches:return None
+        if 'exit_question' not in matches and self.exit_question_reference is not None:
+            question=find_template(cv2.resize(screen,(824,463)),self.exit_question_reference,threshold=.94)
+            if question is not None:
+                matches['exit_question']=MatchResult(round(question.x*1600/824),round(question.y*900/463),
+                    round(question.width*1600/824),round(question.height*900/463),question.confidence)
+        if 'exit_question' in matches:
+            return Detection(FishingState.EXIT_CONFIRM,matches)
+        return None
+
     def detect(self, screen: NDArray[np.uint8]) -> Detection:
         if screen.shape != (900, 1600, 3):
             return Detection(FishingState.UNKNOWN, {})

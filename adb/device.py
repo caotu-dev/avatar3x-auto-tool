@@ -14,6 +14,10 @@ Runner = Callable[..., subprocess.CompletedProcess[bytes]]
 class AdbError(RuntimeError):
     """Lỗi kết nối hoặc thực thi ADB."""
 
+    def __init__(self, message, *, transient=False):
+        super().__init__(message)
+        self.transient = transient
+
 
 class AdbDevice:
     def __init__(self, serial: str, adb_path: str = "adb", timeout: float = 15.0,
@@ -26,21 +30,54 @@ class AdbDevice:
         self._size: tuple[int, int] | None = None
         self._size_observed = 0.0
 
-    def _run(self, args: Sequence[str]) -> bytes:
+    def _run(self, args: Sequence[str], *, timeout=None) -> bytes:
         command = [self.adb_path, "-s", self.serial, *args]
         try:
-            result = self._runner(command, capture_output=True, timeout=self.timeout,
+            result = self._runner(command, capture_output=True, timeout=self.timeout if timeout is None else timeout,
                                   check=False, creationflags=subprocess.CREATE_NO_WINDOW
                                   if hasattr(subprocess, "CREATE_NO_WINDOW") else 0)
         except (OSError, subprocess.TimeoutExpired) as exc:
-            raise AdbError(f"Không chạy được ADB: {exc}") from exc
+            transient = (isinstance(exc, subprocess.TimeoutExpired)
+                         or getattr(exc, 'winerror', None) in (8, 14, 1450, 1455)
+                         or getattr(exc, 'errno', None) == 12)
+            raise AdbError(f"Không chạy được ADB: {exc}", transient=transient) from exc
         if result.returncode:
             message = result.stderr.decode("utf-8", errors="replace").strip()
-            raise AdbError(f"ADB thất bại: {message}")
+            transient = any(marker in message.lower() for marker in (
+                'offline', 'not found', 'no devices', 'protocol fault', 'connection reset',
+                'connection closed', 'cannot connect', 'device disconnected', 'broken pipe'))
+            raise AdbError(f"ADB thất bại: {message}", transient=transient)
         return result.stdout
 
     def is_connected(self) -> bool:
         return self._run(["get-state"]).strip() == b"device"
+
+    def wait_connected(self, timeout=30.0, checkpoint=None, on_retry=None):
+        """Wait for this device only; never restart a shared ADB server or send input."""
+        deadline = time.monotonic() + timeout
+        while True:
+            if checkpoint is not None:
+                checkpoint()
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return False
+            try:
+                if self._run(['get-state'], timeout=min(3.0, remaining)).strip() == b'device':
+                    if checkpoint is not None:
+                        checkpoint()
+                    # No cached dimensions from before a disconnect.
+                    self._size = None
+                    return True
+            except AdbError as exc:
+                if not exc.transient:
+                    raise
+            if on_retry is not None:
+                on_retry()
+            pause_until = min(deadline, time.monotonic() + 2.0)
+            while time.monotonic() < pause_until:
+                if checkpoint is not None:
+                    checkpoint()
+                time.sleep(min(.1, max(0, pause_until - time.monotonic())))
 
     def get_device_info(self) -> dict[str, str]:
         return {name: self._run(["shell", "getprop", prop]).decode().strip()
@@ -76,13 +113,23 @@ class AdbDevice:
             except AdbError as exc:
                 if checkpoint is not None:
                     checkpoint()
-                if not isinstance(exc.__cause__, subprocess.TimeoutExpired):
+                if not exc.transient:
                     raise
+                # A stalled raw stream is much larger than PNG. Switch this
+                # session to compressed capture instead of repeating it forever.
+                if self.fast_capture:
+                    self.fast_capture = False
                 if attempt == 3:
-                    raise AdbError('ADB chụp màn hình timeout sau 3 lần; đã dừng. ' + str(exc)) from exc
+                    reason = 'timeout' if isinstance(exc.__cause__, subprocess.TimeoutExpired) else 'mất kết nối'
+                    raise AdbError(f'ADB chụp màn hình {reason} sau 3 lần; đã dừng. ' + str(exc),
+                                   transient=True) from exc
                 if on_retry is not None:
                     on_retry(attempt, 2)
-                time.sleep(.5)
+                # Keep Stop responsive during recovery waits.
+                for _ in range(attempt * 5):
+                    if checkpoint is not None:
+                        checkpoint()
+                    time.sleep(.1)
                 continue
             except ValueError as exc:
                 raise AdbError(str(exc)) from exc

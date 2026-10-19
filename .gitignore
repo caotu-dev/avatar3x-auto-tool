@@ -20,3 +20,12 @@ debug/**/*.csv
 debug/**/*.log
 debug/*-tests.txt
 debug/*-build.txt
+
+# Local diagnostics, historical QA captures and machine-specific shortcuts
+.local-qa/
+docs/diagnostics/
+*.lnk
+tests/tmp*/
+tests/.tmp*/
+debug/live*/
+debug/check_*.py

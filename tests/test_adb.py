@@ -115,11 +115,12 @@ class AdbTests(unittest.TestCase):
             AdbDevice('test', runner=runner).type_number(50)
         self.assertEqual(runner.call_count, 1)
 
-    def test_offline_screenshot_is_not_timeout_retry(self):
+    def test_offline_screenshot_retries_reads_without_input(self):
         runner = Mock(return_value=subprocess.CompletedProcess([], 1, b'', b'device offline'))
-        with self.assertRaisesRegex(AdbError, 'device offline'):
+        with patch('adb.device.time.sleep'), self.assertRaisesRegex(AdbError, 'device offline'):
             AdbDevice('test', runner=runner).screenshot()
-        self.assertEqual(runner.call_count, 1)
+        self.assertEqual(runner.call_count, 3)
+        self.assertTrue(all(c.args[0][-3:] == ['exec-out', 'screencap', '-p'] for c in runner.call_args_list))
 
 
 if __name__ == "__main__":

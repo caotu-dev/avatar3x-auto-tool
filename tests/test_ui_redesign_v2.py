@@ -8,6 +8,19 @@ from unittest.mock import patch
 from gui import App
 
 class RedesignTests(unittest.TestCase):
+    def test_mission_save_cancel_remain_visible_in_all_modes(self):
+        self.root.attributes('-alpha',0);self.root.deiconify();self.root.update()
+        self.app.show_missions()
+        for index in range(3):
+            self.app.tabs.select(index);self.root.update()
+            popup=self.app.mission_popup;footer=self.app.mission_footer
+            self.assertTrue(footer.winfo_ismapped())
+            self.assertLessEqual(footer.winfo_y()+footer.winfo_height(),popup.winfo_height())
+            for button in footer.winfo_children():
+                self.assertTrue(button.winfo_viewable())
+                self.assertGreater(button.winfo_height(),20)
+        self.app.close_missions(False)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1]/'debug')
         self.folder = Path(self.temp.name)
@@ -104,7 +117,7 @@ class RedesignTests(unittest.TestCase):
         data={'counts':dict.fromkeys(SPECIES,2),'targets':[]}
         self.app.render_progress(data)
         self.assertEqual(int(self.app.table['height']),len(SPECIES))
-        self.assertEqual(self.app.table['yscrollcommand'],'')
+        self.assertTrue(self.app.table['yscrollcommand'])
         self.assertTrue(all(v.get()=='Chưa xác định' for v in self.app.ticket_values.values()))
         self.app.table.selection_set('cua');self.app.focus_progress_target()
         self.assertEqual(self.app.custom_list.selection(),('cua',))

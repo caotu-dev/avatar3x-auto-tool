@@ -1,1 +1,0 @@
-SessionResult(status='STOPPED', reason='Chưa thấy ghế trống đủ tin cậy (có thể bị người chơi che); không bấm ghế mù', rounds=())

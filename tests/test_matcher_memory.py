@@ -5,6 +5,38 @@ import numpy as np
 from vision.matcher import find_template,ROI
 
 class MatcherMemoryTests(unittest.TestCase):
+ def test_tiny_room_anchor_retries_allocation_failure_in_bounded_strips(self):
+  rng=np.random.default_rng(77)
+  image=rng.integers(0,256,(900,1600),dtype=np.uint8)
+  template=image[380:398,901:961].copy()
+  original=cv2.matchTemplate;heights=[]
+  def constrained(region,*args):
+   heights.append(region.shape[0])
+   if region.shape[0]>100:raise MemoryError('simulated native allocation pressure')
+   return original(region,*args)
+  with patch('vision.matcher.cv2.matchTemplate',side_effect=constrained):
+   found=find_template(image,template,.98,contrast_invariant=True)
+  self.assertEqual((found.x,found.y),(901,380))
+  self.assertEqual(heights[0],900)
+  self.assertLessEqual(max(heights[1:]),81)
+
+ def test_non_memory_opencv_failure_is_not_hidden(self):
+  error=cv2.error('invalid input');error.code=-215
+  with patch('vision.matcher.cv2.matchTemplate',side_effect=error) as match:
+   with self.assertRaises(cv2.error):find_template(np.eye(80,dtype=np.uint8),np.eye(18,dtype=np.uint8))
+  self.assertEqual(match.call_count,1)
+
+ def test_opencv_allocation_error_uses_small_strip_fallback(self):
+  image=np.random.default_rng(1).integers(0,256,(180,230),dtype=np.uint8)
+  template=image[100:118,85:145].copy();original=cv2.matchTemplate
+  error=cv2.error('Insufficient memory');error.code=-4
+  def constrained(region,*args):
+   if region.shape[0]>100:raise error
+   return original(region,*args)
+  with patch('vision.matcher.cv2.matchTemplate',side_effect=constrained):
+   found=find_template(image,template,contrast_invariant=True)
+  self.assertEqual((found.x,found.y),(85,100))
+
  def test_strip_matches_full_response_across_boundary_and_roi(self):
   rng=np.random.default_rng(7)
   for channels in (None,3):

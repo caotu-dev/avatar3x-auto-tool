@@ -1,6 +1,0 @@
-{"event": "LATE_NO_BAIT_POPUP", "image": "000_LATE_NO_BAIT_POPUP.png", "area": "ca_map"}
-{"event": "TAP", "image": "001_TAP.png", "action": "Đóng thông báo hết mồi", "point": [798, 581]}
-{"event": "TAP", "image": "002_TAP.png", "action": "Rời ghế", "point": [1465, 845]}
-{"event": "TAP", "image": "003_TAP.png", "action": "Về trung tâm", "point": [875, 848]}
-{"event": "TAP", "image": "004_TAP.png", "action": "Mở shop", "point": [1332, 464]}
-{"event": "TAP", "image": "005_TAP.png", "action": "Đóng menu shop sau kiểm thử", "point": [200, 650]}

@@ -1,0 +1,157 @@
+{
+  "source": "docs/design/avatools-3x-target.png",
+  "banner": [
+    0,
+    43,
+    1534,
+    191
+  ],
+  "decorative_icon_rectangles": {
+    "metric_cast": [
+      47,
+      339,
+      91,
+      382
+    ],
+    "metric_bite": [
+      298,
+      339,
+      342,
+      382
+    ],
+    "metric_miss": [
+      46,
+      406,
+      85,
+      446
+    ],
+    "overview_cart_orange": [
+      298,
+      408,
+      340,
+      446
+    ],
+    "overview_bug_gray": [
+      47,
+      478,
+      86,
+      523
+    ],
+    "overview_boat_teal": [
+      299,
+      482,
+      338,
+      521
+    ],
+    "section_overview_stats": [
+      31,
+      289,
+      63,
+      319
+    ],
+    "section_table_fish": [
+      574,
+      289,
+      609,
+      323
+    ],
+    "section_log_document": [
+      1143,
+      289,
+      1174,
+      323
+    ],
+    "section_tickets": [
+      31,
+      580,
+      63,
+      607
+    ],
+    "ticket_ca_ro": [
+      42,
+      632,
+      92,
+      674
+    ],
+    "ticket_ca_map": [
+      296,
+      631,
+      346,
+      674
+    ],
+    "ticket_ca_noc": [
+      42,
+      730,
+      92,
+      773
+    ],
+    "ticket_dock": [
+      296,
+      732,
+      346,
+      775
+    ],
+    "panel_settings_gear": [
+      102,
+      211,
+      135,
+      246
+    ],
+    "tab_target": [
+      383,
+      210,
+      418,
+      246
+    ],
+    "button_folder": [
+      679,
+      213,
+      713,
+      245
+    ],
+    "fish_ca_ro": [
+      589,
+      401,
+      627,
+      435
+    ],
+    "fish_ca_long_tong": [
+      589,
+      462,
+      627,
+      494
+    ],
+    "fish_cua": [
+      589,
+      521,
+      627,
+      557
+    ],
+    "clock": [
+      314,
+      921,
+      355,
+      963
+    ],
+    "button_play": [
+      99,
+      856,
+      128,
+      889
+    ],
+    "button_pause": [
+      355,
+      854,
+      392,
+      892
+    ],
+    "button_stop": [
+      102,
+      926,
+      133,
+      958
+    ]
+  },
+  "method": "Perimeter-background alpha extraction; no interactive widgets or dynamic text extracted.",
+  "derived_control_icons": "Play, pause, stop and clock cropped to alpha bounds with a 1 px margin. Disabled play/pause/stop use 45% alpha; native button disabled state is retained."
+}

@@ -1,5 +1,14 @@
 # Ảnh kiểm tra ngữ cảnh
 
+`player_menu_exit.png`: ảnh lỗi thật 18/10/2026, menu người chơi che shop và
+popup hỏi thoát cùng xuất hiện tại trung tâm. Kiểm tra phải bấm Không, đóng
+menu trên nền trống rồi mới tin vào map. Hai mẫu glyph message/punch trong
+`vision/templates/world/` được cắt từ ảnh này; không dùng OCR tên người chơi.
+
+`sale_success.png`: vùng popup bán cá từ ảnh lỗi phiên
+`2026-10-17_23-23-46_142576` lúc bán trước nửa đêm. Giữ nguyên popup và nút OK;
+phần còn lại đặt đen để không lưu tên nhân vật hoặc số dư tài khoản.
+
 `idle_pond.png`: ảnh ADB trước khi vào ghế, ngày 2026-10-08 buổi tối.
 `no_bait.png`: ảnh thiếu mồi thật của người dùng, đổi kích thước thành 1600x900
 để kiểm tra bộ nhận diện trên viewport tham chiếu; chưa phải ảnh ADB nguyên bản.

@@ -1,126 +1,129 @@
-# Avatar Fishing Bot
+# Phát triển Avatools 3x
 
-Bot Python điều khiển Avatar trong LDPlayer qua ADB, ảnh chụp và OCR.
-UI Redesign v2 là bản chính; engine và tọa độ game giữ nguyên.
+Tài liệu này dành cho người phát triển. Hướng dẫn cài game và sử dụng EXE nằm
+trong [README](../README.md). Phiên bản hiện tại: **2.0.0**.
 
-## Chạy ứng dụng
+## Chạy source
 
-Mở **`dist/AvatarFishingBot/AvatarFishingBot.exe`** hoặc shortcut
-`Avatar Fishing Bot.lnk`. Giữ nguyên toàn bộ thư mục cạnh `.exe`.
-Bản đóng gói không cần cài Python. Chạy source bằng `python gui.py`.
-
-Cần LDPlayer đang mở game ở **1600×900** và ADB được bật.
-Mặc định thiết bị `emulator-5554`; ADB lấy từ PATH hoặc LDPlayer14.
-Có thể đặt `AVATAR_ADB_PATH` và `AVATAR_DEVICE_SERIAL` trong môi trường.
-
-## Giao diện và hành vi
-
-- Topbar có Thiết lập, Bắt đầu, Tạm dừng/Tiếp tục, Kết thúc, thư mục log và đồng hồ.
-- **Nhiệm vụ game:** bật tự đọc/làm nhiệm vụ. **Câu tự do:** bật chế độ và chọn khu.
-  **Tự đặt mục tiêu:** chọn cá, chọn hàng đang chỉnh rồi đặt số lượng hoặc đổi thứ tự.
-- Bảng gồm các loài Sinh Thái và cá Bến Tàu đã xác minh bằng kết quả trong game.
-  Checkbox chọn cá và focus hàng là hai trạng thái riêng.
-  Số lượng, ↑/↓ và Reset nằm dưới bảng tiến độ. Có thể kéo hàng để đổi thứ tự.
-- Reset bỏ chọn, đặt số lượng về 1, trả thứ tự mặc định và xóa tiến độ tự đặt;
-  không xóa nhiệm vụ trong game, tồn mồi hay log.
-- Bố cục rộng dùng ba cột 35/40/25. Cửa sổ hẹp xếp tổng quan xuống dưới;
-  cuộn cả trang khi thiếu chiều cao. Bảng cá không có cuộn riêng.
-- Popup Thiết lập dùng draft. Lưu xác thực và ghi cấu hình trước khi áp dụng;
-  Hủy/X/Escape bỏ thay đổi chưa lưu. Mồi mua mỗi lần từ 1 đến 50.
-- Bắt đầu luôn mở bước chuẩn bị: tới Sinh Thái/Bến Tàu, quét rương, đọc vé/ngày hết hạn,
-  số lượng mồi và số dư Xu/Lượng. Chỉ quét toàn rương một lần mỗi lần Bắt đầu;
-  đổi khu hoặc khôi phục mất phiên dùng cache trong phiên. Biên nhận mua thành công
-  cập nhật vé/mồi ngay, không mở rương kiểm tra lại. Rương hết mồi thì mua theo thiết lập.
-  Sau khi bắt đầu câu, checkbox mua mồi quyết định có tự mua tiếp khi hết hay không.
-  Chỉ cộng số mồi đã mua khi có biên nhận xác nhận.
-  Bán khi về shop và lịch bán cố định **23:57** dùng giờ máy Windows.
-- Thiết lập/mục tiêu bị khóa khi có phiên đang chạy. Tạm dừng có hiệu lực sau lượt hiện tại;
-  Tiếp tục giữ phiên. Kết thúc chặn thao tác mới và chờ thao tác đang thực thi kết thúc.
-  Đồng hồ bao gồm thời gian tạm dừng.
-- Progress và sáu metrics lấy dữ liệu engine. Sinh thái/Bến tàu là tồn mồi riêng;
-  chưa biết thì hiển thị Chưa xác định. Bốn thẻ vé lấy thông tin rương, hiển thị
-  Có/còn hiệu lực, Không có, Hết hạn hoặc Chưa xác định và ngày hết hạn khi đọc được.
-- Bốn checkbox tự mua vé riêng, mặc định tắt. Chỉ mua vé cần cho khu câu, đúng shop
-  và đúng loại tiền (vé cá mập 2 lượng). Thiếu tiền hoặc dữ liệu không chắc sẽ dừng.
-  Không dùng lượng khóa. Vé xuất hiện trong rương là còn hiệu lực; vé hết hạn tự biến mất.
-  Ngày đọc được chỉ dùng để hiển thị, không khiến bot mua lại vé đang có.
-- Popup chuẩn bị có Hủy; Bắt đầu/Tạm dừng bị khóa trong bước này. Đồng hồ bắt đầu
-  sau chuẩn bị. Mỗi lần Bắt đầu mới vẫn quét lại rương. Số mồi theo dõi trong lúc câu
-  có dấu ≈ vì là ước tính; chỉ tự mua bổ sung khi game xác nhận hết mồi.
-- Mục tiêu chưa hoàn thành được khôi phục khi danh sách, số lượng và thứ tự khớp phiên đã lưu.
-  Danh sách đã hoàn thành bắt đầu phiên mới từ 0. Hoàn thành có popup và âm thanh Windows.
-
-Bot không tự trả nhiệm vụ trong game. Luồng mua vé cần xác nhận tên/giá/nút thanh toán
-và biên nhận; popup chưa nhận diện sẽ dừng trước bước tiếp theo. Luồng Bến Tàu hỗ trợ
-chọn thuyền trống, đổi khu khi đông người, câu và mua mồi Cá Trâm. Popup lạ, lỗi kết nối hoặc thiếu bằng chứng
-nhận diện sẽ dừng và lưu thông tin lỗi. Các mùa/giao diện game khác còn cần kiểm tra.
-
-## Dữ liệu và cập nhật
-
-Trong bản `.exe`, `runtime/` và `debug/` nằm cạnh executable;
-trong source chúng nằm ở gốc repository.
-
-| File/thư mục | Nội dung |
-|---|---|
-| `runtime/ui_preferences.json` | Thiết lập và danh sách mục tiêu |
-| `runtime/custom_mission.json` | Tiến độ tự đặt |
-| `runtime/ui_inventory.json` | Tồn cá/mồi, ngày bán và trạng thái mua |
-| `runtime/ui_last.json` | Snapshot phiên cuối |
-| `runtime/game_quest.json`, `navigation.json`, `dock.json` | State nhiệm vụ/di chuyển/bến tàu khi có |
-| `debug/ui/<phiên>/` | Log, ảnh và state của từng phiên GUI |
-| `debug/bugs.jsonl` | Lỗi dừng và kết quả cần chẩn đoán |
-
-Khi đưa v2 thành bản chính, file runtime mới nhất và log cả hai bản được giữ.
-Script build chỉ cập nhật file thuộc package theo `release-files.json`;
-không xóa `runtime/debug`.
-
-## Cài đặt và build
-
-Cần Python 3.10 trở lên; môi trường hiện tại dùng Python 3.12/Tk 8.6.
+Windows, Python 3.12 được dùng cho bản build chính thức. UI dùng Tkinter/ttk,
+nhận diện dùng NumPy/OpenCV; không có GUI framework mới.
 
 ```powershell
 python -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements-build.txt
-powershell -ExecutionPolicy Bypass -File build_gui.ps1
+.venv\Scripts\python.exe gui.py
 ```
 
-Package chính nằm tại `dist/AvatarFishingBot/`. `build/` chỉ là staging/cache,
-được tạo lại khi build. Không còn script build hoặc package riêng cho v2.
-Đóng app trước khi cập nhật executable.
+LDPlayer cần Android 1600×900, ADB cục bộ và game đã đăng nhập. ADB được tìm
+trong PATH hoặc `C:\LDPlayer\LDPlayer14\adb.exe`; có thể ghi đè bằng
+`AVATAR_ADB_PATH` và `AVATAR_DEVICE_SERIAL` (mặc định `emulator-5554`).
 
-## Kiểm tra và công cụ CLI
+## Cấu trúc source
+
+| Thư mục/file | Chức năng |
+| --- | --- |
+| `gui.py`, `ui/` | UI, theme/assets, worker và các control |
+| `fishing/` | Nhận diện trạng thái, solver, phiên câu, rương, nhiệm vụ, di chuyển |
+| `adb/` | Transport, screenshot và kiểm tra tọa độ |
+| `vision/` | Matching/layout, templates và Windows OCR helper |
+| `config/` | Settings, giới hạn luồng native, version Windows |
+| `tests/fixtures/` | Ảnh cố định để regression; không phải cache có thể dọn tùy ý |
+| `tools/` | Chụp README, tách artwork tham chiếu, kiểm tra/phát hành GitHub |
+| `docs/design/` | Tham chiếu thiết kế được duyệt |
+| `docs/images/`, `docs/releases/` | Ảnh và ghi chú phát hành dùng cho người đọc |
+
+UI updates đi qua queue tới luồng Tk. Cần giữ logic nhận diện, xác nhận thanh
+toán và giới hạn luồng worker khi chỉnh layout. Animation tiến độ chỉ đổi ảnh
+hiển thị; tổng/ratio vẫn lấy từ dữ liệu mục tiêu có clamp.
+
+## Test
 
 ```powershell
 .venv\Scripts\python.exe -m unittest discover -s tests
 ```
 
-Tests dùng mock/fixtures, không bấm emulator. Tài liệu thiết kế, screenshots và
-kết quả kiểm tra hiện tại nằm trong `docs/ui/avatar_fishing_codex_v2/`.
+Tests dùng mock và fixtures, không gửi thao tác vào giả lập thật. Cần desktop
+Windows/Tk cho kiểm tra UI. Kết quả release: [VALIDATION_v2.0.0.md](VALIDATION_v2.0.0.md).
 
-| Lệnh | Hành vi |
-|---|---|
-| `python main.py` | Kiểm tra ADB và chụp ảnh, không gửi input |
-| `python main.py --record --duration 120 --interval 0.3` | Ghi phiên thao tác thủ công |
-| `python -m debug.analyze <thư mục phiên> --solve` | Phân tích trạng thái/solver offline |
-| `python -m debug.solve <ảnh>` | Vẽ kế hoạch kéo offline |
-| `python main.py --run-one` | Quăng/giải một lượt thật |
-| `python main.py --run --rounds 5 --area ca_ro` | Câu số lượt giới hạn |
-| `python main.py --tour --rounds 20` | Shop/cá nóc/cá mập theo luồng CLI hiện có |
-| `python main.py --mission` | Nhiệm vụ từ `config/mission.json` |
-| `python main.py --read-quest` | Mở và đọc nhiệm vụ trong game |
-| `python main.py --navigate fishing` | Di chuyển; đích khác: administration, dock |
-| `python main.py --test-navigation` | Kiểm tra vòng di chuyển |
-| `python main.py --dock-check` | Kiểm tra bến tàu, chưa mua/quăng |
+Chụp lại ảnh README từ widget thật, không dùng dữ liệu tài khoản:
 
-Templates thật và nguồn mẫu: `vision/templates/README.md`.
-Fixtures kiểm tra nằm trong `tests/fixtures/`; không xóa cùng dữ liệu debug.
+```powershell
+.venv\Scripts\python.exe -m pip install Pillow
+.venv\Scripts\python.exe tools/capture_readme.py
+```
 
-Mất phiên: chỉ bấm Chơi tiếp khi nhận diện logo và nút ổn định. Nếu tap bị bỏ qua,
-bot thử lại tối đa 3 lần; không bấm vào màn hình loading. Khôi phục giữ tiến độ và
-cache rương; thất bại báo ERROR, không kết thúc bằng trạng thái RUNNING.
+Pillow chỉ dùng khi chụp tài liệu, không phải dependency runtime của EXE.
+Dữ liệu ảnh được đánh dấu minh họa; helper không tạo BotWorker hay gọi ADB.
 
-### Dung lượng và nhật ký
+## Build portable
 
-Chỉ chạy `dist/AvatarFishingBot/AvatarFishingBot.exe` hoặc shortcut `Avatar Fishing Bot.lnk`; cần giữ các thư viện cạnh exe. Công cụ Python trong `.venv` dùng để phát triển/build, không phải bản bot thứ hai. Build thành công tự xóa staging.
+Đóng EXE trước khi build. `build_gui.ps1` dùng spec hiện có, cập nhật package theo
+manifest và bảo toàn `runtime/debug`; thư viện không đổi được kiểm tra hash rồi
+bỏ qua copy. Không tự dừng ứng dụng đang chạy để ghi đè EXE.
 
-Ảnh sự kiện tự động được xoay vòng ba JPEG trong mỗi thư mục chẩn đoán. Debug được dọn định kỳ theo tuổi 24 giờ và ngân sách 32 MiB, tối đa 128 báo cáo lượt GUI; file đang dùng trong 10 phút gần nhất và kết quả lượt phục vụ khôi phục được giữ. Ảnh OCR làm việc, ảnh xuất thủ công, `vision/templates`, `tests/fixtures`, `ui/assets` và `runtime` không bị chuyển sang ảnh nén. Dữ liệu nhiệm vụ/vé/mồi lưu trong `runtime`, không phụ thuộc ảnh debug.
+```powershell
+powershell -ExecutionPolicy Bypass -File build_gui.ps1
+powershell -ExecutionPolicy Bypass -File package_release.ps1
+.venv\Scripts\python.exe tools/verify_release.py --installed dist/AvatarFishingBot
+```
+
+Output: `dist/AvatarFishingBot/Avatools 3x.exe` và
+`dist/release/Avatools-3x-windows-x64.zip` + `SHA256SUMS.txt`.
+Giữ nguyên cả thư mục portable. ZIP có hướng dẫn/ảnh, không kèm dữ liệu cá nhân.
+
+Kiểm tra frozen UI, không chạy bot:
+
+```powershell
+& '.\dist\AvatarFishingBot\Avatools 3x.exe' --ui-check
+& '.\dist\AvatarFishingBot\Avatools 3x.exe' --smoke-test
+```
+
+Hai chế độ ghi JSON chẩn đoán cạnh EXE; chúng không nằm trong manifest phát hành.
+Version ở `ui/branding.py` và `config/windows_version_info.txt` cần đồng bộ.
+
+## Dữ liệu người dùng
+
+Trong source, dữ liệu nằm ở gốc repo; trong EXE, nằm cạnh executable:
+
+- `runtime/ui_preferences.json`: thiết lập UI và lựa chọn.
+- `runtime/custom_mission.json`, `game_quest.json`: tiến độ/mục tiêu.
+- `runtime/ui_inventory.json`, `character_state.json`: trạng thái rương/cache.
+- `runtime/ui_last.json`: snapshot phiên cuối.
+- `debug/ui/<phiên>/`: log và báo cáo; `debug/bugs.jsonl`: lỗi cần kiểm tra.
+
+Không commit dữ liệu runtime/debug, token, mật khẩu, shortcut đường dẫn máy,
+file build hoặc báo cáo máy cá nhân. Kết quả QA phát sinh nằm trong `docs/build/`
+(bị ignore), chẩn đoán máy ở `docs/diagnostics/` (bị ignore). Tư liệu QA lịch sử
+đã được chuyển khỏi source công khai vào `.local-qa/` trên máy phát triển.
+
+Dọn debug có ngân sách/tuổi và bảo vệ bằng chứng giao dịch chưa xử lý. Không
+xóa templates, fixtures hoặc runtime cùng với cache. Pagefile/RAM của LDPlayer
+không thuộc phạm vi bộ dọn dữ liệu của tool.
+
+## Phát hành
+
+Workflow Windows chạy tests, build và upload ZIP/SHA, rồi tạo draft Release khi
+push tag `v*`. Chỉ gắn tag vào commit đã kiểm tra. Sau khi CI thành công, đối
+chiếu asset/version và publish draft. Không retag phiên bản đã công bố.
+
+```powershell
+git tag -a v2.0.0 -m 'Avatools 3x v2.0.0'
+git push origin main
+git push origin v2.0.0
+.venv\Scripts\python.exe tools/github_release.py runs --sha <commit>
+.venv\Scripts\python.exe tools/github_release.py release --tag v2.0.0
+```
+
+Helper lấy token từ Git Credential Manager hoặc GH_TOKEN/GITHUB_TOKEN, không in
+bí mật. Lệnh publish yêu cầu notes và đúng SHA đã review:
+
+```powershell
+.venv\Scripts\python.exe tools/github_release.py publish --tag v2.0.0 --sha <commit> --notes docs/releases/v2.0.0.md
+```
+
+## CLI
+
+`python main.py --help` liệt kê đầy đủ tùy chọn. `python main.py` chỉ kiểm tra
+ADB/chụp ảnh; các lệnh `--run-one`, `--run`, `--tour`, `--navigate` thực sự thao
+tác game. Công cụ phân tích offline: `python -m debug.solve <ảnh>` hoặc
+`python -m debug.analyze <thư mục phiên> --solve`.

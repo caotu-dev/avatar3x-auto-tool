@@ -8,7 +8,7 @@ from typing import Callable, Protocol
 import numpy as np
 from numpy.typing import NDArray
 
-from adb.screenshot import save_debug_screenshot
+from adb.screenshot import save_event_screenshot
 from config.settings import ROOT, TrialSettings
 from .detector import Detection, FishingDetector
 from .solver import DragMatch, FishingSolver, SolvePlan
@@ -72,7 +72,8 @@ class OneRoundBot:
         self.output.mkdir(parents=True, exist_ok=True)
         filename = f"{self.event_index:03d}_{name}.png"
         if self.last_screen is not None:
-            filename=save_debug_screenshot(self.last_screen, self.output / filename).name
+            captured=save_event_screenshot(self.last_screen, self.output / filename, name, details)
+            filename=captured.name if captured is not None else None
         event = {"event": name, "elapsed": round(self.clock() - self.started, 3),
                  "image": filename, **details}
         with (self.output / "events.jsonl").open("a", encoding="utf-8") as stream:

@@ -1,5 +1,8 @@
 """Khởi động giao diện: python gui.py."""
 import os
+from config.native_runtime import configure_native_runtime
+configure_native_runtime()
+
 import queue
 import threading
 import msvcrt
@@ -14,7 +17,9 @@ from tkinter import ttk, messagebox
 from config.settings import ROOT
 from fishing.catch import SPECIES
 from ui.runner import AREAS_UI, Options, BotWorker
-from ui.theme import apply_theme, token, font, banner, asset
+from ui.theme import apply_theme, token, font, banner, asset, TILE_COLORS
+from ui.branding import APP_NAME, APP_VERSION, apply_identity
+from ui.mission_progress import MissionProgress
 
 
 class App:
@@ -23,16 +28,20 @@ class App:
         self.messages = queue.Queue()
         self.inventory_cache = {}  # Fast in-memory layer over runtime/character_state.json.
         self.timer_started = None
+        self.mini_mode = False
         self.elapsed = tk.StringVar(value='00:00:00')
         self.quantity = tk.IntVar(value=50)
         self.auto_resume = tk.BooleanVar(value=False)
         self.resume_limit = tk.IntVar(value=3)
         self.midnight = tk.BooleanVar(value=True)
-        root.title('Avatar Fishing Bot')
-        root.geometry(f'{min(1536, root.winfo_screenwidth()-32)}x{min(960, root.winfo_screenheight()-80)}')
+        apply_identity(root)
+        root.geometry(f'{min(1536, root.winfo_screenwidth()-32)}x{min(1024, root.winfo_screenheight()-50)}')
         root.minsize(1024, 720)
         tkfont.nametofont('TkDefaultFont').configure(family='Segoe UI', size=10)
         apply_theme(root)
+        from ui.titlebar import WindowTitlebar
+        self.titlebar = WindowTitlebar(root, self.toggle_mini, self.close)
+        self.titlebar.pack(fill='x')
         self.header = banner(root)
         self.header.pack(fill='x')
         self.status = tk.StringVar(value='Sẵn sàng • Chọn chế độ để bắt đầu')
@@ -41,15 +50,17 @@ class App:
         self.settings_popup = None
         self.preparation_popup = None
         self.auto_tickets = {key: tk.BooleanVar(value=False) for key in ("ca_ro", "ca_noc", "ca_map", "dock")} 
-        top = self.topbar = ttk.Frame(root,padding=(12,6))
+        top = self.topbar = ttk.Frame(root,padding=(9,10))
         top.pack(fill='x')
-        self.settings_button = ttk.Button(top, text=' Thiết lập', image=asset(root, 'panel_settings_gear'), compound='left', command=self.show_settings)
-        self.log_folder_button = ttk.Button(top, text=' Mở thư mục log', image=asset(root, 'button_folder'), compound='left', command=self.open_logs)
-        for i in range(5):top.columnconfigure(i,weight=1,uniform='nav')
-        self.settings_button.grid(row=0,column=0,sticky='nsew',padx=3)
-        self.log_folder_button.grid(row=0,column=2,sticky='nsew',padx=3)
+        self.settings_button = ttk.Button(top, text=' Thiết lập', image=asset(root, 'panel_settings_gear'), compound='left', command=self.show_settings, style='Nav.TButton')
+        self.log_folder_button = ttk.Button(top, text=' Mở thư mục log', image=asset(root, 'button_folder'), compound='left', command=self.open_logs, style='Folder.Nav.TButton')
+        top.rowconfigure(0, minsize=54)
+        for i,weight in enumerate((302,305,303,309,296)):top.columnconfigure(i,weight=weight,uniform='nav')
+        self.mini_button = self.titlebar.buttons['mini']
+        self.settings_button.grid(row=0,column=0,sticky='nsew',padx=5)
+        self.log_folder_button.grid(row=0,column=2,sticky='nsew',padx=5)
         self.start_reason = tk.StringVar(value='Chọn chế độ để bắt đầu.')
-        body = self.body = ttk.Frame(root, padding=12)
+        body = self.body = ttk.Frame(root, padding=(16,10,14,40))
         body.pack(fill='both', expand=True)
         self.workspace = body
         self.workspace_canvas = tk.Canvas(body, background=token('color.background.app'), highlightthickness=0)
@@ -116,85 +127,119 @@ class App:
                 self.custom_list.insert('', 'end', iid=species, text=name, image=asset(root, 'fish_'+species), values=('□', name, 1, area_name))
         self.custom_list.pack(fill='x', expand=True)
         self.tabs.bind('<<NotebookTabChanged>>', self.mode_changed)
-        footer = ttk.Frame(self.mission_popup, padding=12)
-        footer.pack(fill='x')
+        footer = self.mission_footer = ttk.Frame(self.mission_popup, padding=12)
+        # Reserve the action row before the variable-height catalog. Otherwise
+        # the selected tab can consume the popup and hide Save/Cancel.
+        footer.pack(side='bottom', fill='x', before=self.mode_bar)
         ttk.Button(footer, text='Hủy', command=lambda: self.close_missions(False)).pack(side='left')
         ttk.Button(footer, text='Lưu nhiệm vụ', style='Blue.TButton', command=lambda: self.close_missions(True)).pack(side='right')
-        self.missions_button = ttk.Button(top, text=' Chọn nhiệm vụ', image=asset(root,'tab_target'), compound='left', command=self.show_missions)
-        self.missions_button.grid(row=0,column=1,sticky='nsew',padx=3)
-        summary = self.summary_card = ttk.Frame(self.overview, style='Card.TFrame', padding=8)
-        summary.pack(fill='x', pady=(0,4))
-        ttk.Label(summary, text=' Tổng quan phiên câu', image=asset(root, 'section_overview_stats'), compound='left', style='Section.TLabel').pack(anchor='w')
+        self.missions_button = ttk.Button(top, text=' Chọn nhiệm vụ', image=asset(root,'tab_target'), compound='left', command=self.show_missions, style='Nav.TButton')
+        self.missions_button.grid(row=0,column=1,sticky='nsew',padx=5)
+        for button in (self.settings_button,self.missions_button,self.log_folder_button):
+            arrow = ttk.Label(button,text='›',foreground='#76A8F4',background='#F7FBFF',font=('Segoe UI',-26))
+            arrow.place(relx=1,x=-22,rely=.5,anchor='center')
+            arrow.bind('<Button-1>',lambda event, target=button: target.invoke())
+        summary = self.summary_card = ttk.Frame(self.overview, style='Card.TFrame', padding=10)
+        summary.pack(fill='x', pady=(0,6))
+        ttk.Label(summary, padding=(3,0,0,0), text=' Tổng quan phiên câu', image=asset(root, 'section_overview_stats'), compound='left', style='Section.TLabel').pack(anchor='w')
         self.metric_values = {key: tk.StringVar(value='0') for key in ('casts', 'bites', 'misses', 'bait_purchased')}
         self.metric_tiles = []
         tiles = ttk.Frame(summary, style='Inner.TFrame')
-        tiles.pack(fill='x', pady=2)
+        tiles.pack(fill='x', pady=(11,0))
         for index, (key, title, color) in enumerate([('casts', 'Quăng', 'castBg'), ('bites', 'Cắn câu', 'biteBg'), ('misses', 'Trật', 'missBg'), ('bait_purchased', 'Mồi mua', 'baitBg')]):
             tiles.columnconfigure(index % 2, weight=1, uniform='metric')
-            tile = ttk.Frame(tiles, style=color+'.TFrame', padding=(8, 4))
+            tile = ttk.Frame(tiles, style=color+'.TFrame', padding=(12, 6))
             self.metric_tiles.append(tile)
-            tile.grid(row=index // 2, column=index % 2, sticky='ew', padx=4, pady=2)
+            tile.grid(row=index // 2, column=index % 2, sticky='ew', padx=4, pady=(0,9) if index<2 else 0)
             icon = ('metric_cast', 'metric_bite', 'metric_miss', 'overview_cart_orange')[index]
-            tk.Label(tile, image=asset(root, icon), bg=token('color.metric.'+color)).pack(side='left', padx=(0, 6))
-            tk.Label(tile,text=title,bg=token('color.metric.'+color),fg=token('color.text.secondary'),font=font('caption')).pack(side='left')
-            tk.Label(tile,textvariable=self.metric_values[key],bg=token('color.metric.'+color),fg=token('color.text.primary'),font=font('bodyLarge',True)).pack(side='right')
+            tk.Label(tile, image=asset(root, icon), bg=token('color.metric.'+color)).pack(side='left', padx=(0, 8))
+            tk.Label(tile,text=title,bg=token('color.metric.'+color),fg=token('color.text.primary'),font=font('body')).pack(side='left',pady=(2,0))
+            tk.Label(tile,textvariable=self.metric_values[key],bg=token('color.metric.'+color),fg=token('color.text.primary'),font=font('metric',True)).pack(side='right',padx=(0,7),pady=(0,2))
         self.stock_values = {key: tk.StringVar(value='Chưa xác định') for key in ('ecological', 'dock')}
         self.stock_tiles = []
         metadata = ttk.Frame(summary, style='Inner.TFrame')
-        metadata.pack(fill='x', pady=(4, 0))
+        metadata.pack(fill='x', pady=(8, 0))
         for index, (key, title, icon) in enumerate([('ecological', 'Sinh thái', 'overview_bug_gray'), ('dock', 'Bến tàu', 'overview_boat_teal')]):
             metadata.columnconfigure(index, weight=1, uniform='stock')
-            box = ttk.Frame(metadata, style='stock.TFrame', padding=(8, 2))
+            box = ttk.Frame(metadata, style=key+'.TFrame', padding=(12, 8))
             self.stock_tiles.append(box)
-            box.grid(row=0, column=index, sticky='ew', padx=4, pady=2)
-            tk.Label(box, image=asset(root, icon), bg=token('color.background.surfaceMuted')).pack(side='left', padx=(0, 10))
-            label = tk.Frame(box, bg=token('color.background.surfaceMuted'))
-            label.pack(side='left')
-            tk.Label(label, text=title, bg=token('color.background.surfaceMuted'), fg=token('color.text.secondary'), font=font('body')).pack(anchor='w')
-            tk.Label(label, textvariable=self.stock_values[key], bg=token('color.background.surfaceMuted'), fg=token('color.text.primary'), font=font('body'), wraplength=100).pack(anchor='w')
+            box.grid(row=0, column=index, sticky='ew', padx=4, pady=(2,0))
+            tk.Label(box, image=asset(root, icon), bg=TILE_COLORS[key]).pack(side='left', padx=(0,14 if index==0 else 12))
+            label = tk.Frame(box, bg=TILE_COLORS[key])
+            label.pack(side='left',pady=(2,0))
+            tk.Label(label, text=title, bg=TILE_COLORS[key], fg=token('color.text.primary'), font=font('body')).pack(anchor='w')
+            tk.Label(label, textvariable=self.stock_values[key], bg=TILE_COLORS[key], fg=token('color.text.primary'), font=font('body'),padx=6 if key=='ecological' else 0, wraplength=170).pack(anchor='w',pady=(3,0))
+            box.bind('<Configure>', lambda e, target=label: [child.configure(wraplength=max(65,e.width-76)) for child in target.winfo_children()])
         self.currency_images={key:asset(root,'currency_'+key) for key in ('coins','gold')}
         self.ticket_images={key:asset(root,'ticket_'+key) for key in ('ca_ro','ca_map','ca_noc','dock')}
         self.wallet_values = {key: tk.StringVar(value='Chưa xác định') for key in ('coins', 'gold')}
         for index,(key, label) in enumerate([('coins', 'Xu'), ('gold', 'Lượng')]):
-            line = ttk.Frame(top, style='Card.TFrame',padding=(6,4))
-            line.grid(row=0,column=3+index,sticky='nsew',padx=3)
-            ttk.Label(line, text=label + ': ', image=self.currency_images[key], compound='left').pack(side='left')
-            ttk.Label(line, textvariable=self.wallet_values[key],font=font('caption'),wraplength=90).pack(side='left')
-        tickets = self.ticket_card = ttk.Frame(self.overview, style='Card.TFrame', padding=8)
-        tickets.pack(fill='x', pady=4)
-        ttk.Label(tickets, text='▰  Vé câu (hiệu lực)', style='Section.TLabel').pack(anchor='w', pady=(0, 3))
+            line = ttk.Frame(top, style='Nav.Card.TFrame',padding=(15,3))
+            line.grid(row=0,column=3+index,sticky='nsew',padx=5)
+            ttk.Label(line, background='#F7FBFF', font=(token('typography.fontFamily'),12,'bold'), text=(' ' if key=='gold' else '  ')+label + ':  ', image=self.currency_images[key], compound='left').pack(side='left')
+            ttk.Label(line, textvariable=self.wallet_values[key],background='#F7FBFF',font=(token('typography.fontFamily'),11,'bold'),wraplength=145).pack(side='left')
+            if key=='gold':
+                ttk.Label(line,text='›',foreground='#76A8F4',background='#F7FBFF',font=('Segoe UI',-26)).place(relx=1,x=-22,rely=.5,anchor='center')
+        tickets = self.ticket_card = ttk.Frame(self.overview, style='Card.TFrame', padding=10)
+        tickets.pack(fill='x', pady=(11,7))
+        ttk.Label(tickets, padding=(2,0,0,0), text=' Vé câu (hiệu lực)', image=asset(root,'section_tickets'), compound='left', style='Section.TLabel').pack(anchor='w', pady=(0, 9))
         ticket_grid = ttk.Frame(tickets, style='Inner.TFrame')
         ticket_grid.pack(fill='x')
         self.ticket_values = {}
         self.ticket_tiles = []
         for i, title in enumerate(('Vé câu cá rô', 'Vé câu cá mập', 'Vé câu cá lóc', 'Vé câu bến tàu')):
             ticket_grid.columnconfigure(i % 2, weight=1, uniform='ticket')
-            tile = ttk.Frame(ticket_grid, style='stock.TFrame', padding=4)
+            color_key = ('ticket_ro','ticket_map','ticket_loc','ticket_dock')[i]
+            color = TILE_COLORS[color_key]
+            tile = ttk.Frame(ticket_grid, style=color_key+'.TFrame', padding=(10,6))
             self.ticket_tiles.append(tile)
-            tile.grid(row=i // 2, column=i % 2, sticky='nsew', padx=3, pady=3)
-            ttk.Label(tile, text=title, image=self.ticket_images[('ca_ro','ca_map','ca_noc','dock')[i]], compound='left', background='#EAF3FF', wraplength=140).pack(anchor='w')
+            tile.grid(row=i // 2, column=i % 2, sticky='nsew', padx=4, pady=(4,6) if i<2 else (4,2))
+            ttk.Label(tile, image=self.ticket_images[('ca_ro','ca_map','ca_noc','dock')[i]], background=color).pack(side='left', anchor='n', padx=(0,5),pady=(3,0))
+            detail = tk.Frame(tile, bg=color)
+            detail.pack(side='left', fill='both', expand=True)
+            name_label = tk.Label(detail, text=title, bg=color, fg=token('color.text.primary'), font=font('body',True), anchor='w', justify='left')
+            name_label.pack(anchor='w',pady=(5,0))
             value = self.ticket_values[title] = tk.StringVar(value='Chưa xác định')
-            ttk.Label(tile, textvariable=value, background='#EAF3FF', foreground=token('color.text.muted'), wraplength=140,font=('Segoe UI',9)).pack(anchor='w', pady=2)
+            value_label = tk.Label(detail, textvariable=value, bg=color, fg=token('color.text.secondary'), justify='left', anchor='nw', height=2, font=font('caption'))
+            value_label.pack(anchor='w', pady=(1,0))
+            tile.bind('<Configure>', lambda e, a=name_label, b=value_label: (a.configure(wraplength=max(75,e.width-80)), b.configure(wraplength=max(75,e.width-80))))
 
         self.overview.bind('<Configure>', self.resize_overview)
-        catches = ttk.Frame(self.activity, style='Card.TFrame', padding=12)
+        catches = self.progress_card = ttk.Frame(self.activity, style='Card.TFrame', padding=(15,12,16,18))
         catches.grid(row=0, column=0, sticky='nsew')
-        ttk.Label(catches, text=' Cá đã câu & tiến độ nhiệm vụ', image=asset(root, 'section_table_fish'), compound='left', style='Section.TLabel').pack(anchor='w', pady=(0, 12))
+        progress_header = ttk.Frame(catches, style='Inner.TFrame')
+        progress_header.pack(fill='x', pady=(0, 12))
+        self.restore_button = ttk.Button(progress_header, text='⤢  Mở rộng',
+                                         style='Compact.TButton', command=self.toggle_mini)
+        ttk.Label(progress_header, text=' Tiến độ nhiệm vụ', image=asset(root, 'section_table_fish'), compound='left', style='Section.TLabel').pack(side='left')
+        # Reserve footer space before the expanding table: it never overlays rows.
+        self.mission_progress = MissionProgress(catches)
+        self.mission_progress.pack(side='bottom', fill='x', padx=(0,1), pady=(8, 0))
         table_frame = ttk.Frame(catches, style='Inner.TFrame')
         table_frame.pack(fill='both', expand=True)
         self.table_frame = table_frame
-        self.table = ttk.Treeview(table_frame, columns=('name', 'progress'), show='tree headings', displaycolumns=('progress',), height=5)
+        self.table = ttk.Treeview(table_frame, columns=('name', 'progress', 'status'), show='tree headings', displaycolumns=('progress','status'), height=5)
         self.table.heading('#0', text='Loại cá')
-        self.table.column('#0', width=230, minwidth=150)
+        self.table.column('#0', width=180, minwidth=105)
         self.table.heading('name', text='Loại cá')
         self.table.heading('progress', text='Số lượng / Tiến độ')
         self.table.column('name', width=180, anchor='w')
-        self.table.column('progress', width=180, anchor='center')
-        self.table.pack(fill='both', expand=True)
+        self.table.column('progress', width=176, minwidth=65, anchor='center')
+        self.table.heading('status', text='Trạng thái',anchor='w')
+        self.table.column('status', width=160, minwidth=122, anchor='w')
+        self.table.tag_configure('active_even',background='#F3F9FF')
+        self.table.tag_configure('completed', background='#EAF8EF', foreground='#236D3A')
+        self.table.tag_configure('active', background='#EAF3FF', foreground='#1267F5')
+        self.table.tag_configure('waiting', foreground='#5272A9')
+        self.table.pack(side='left',fill='both', expand=True)
+        self.table_scrollbar = ttk.Scrollbar(table_frame, command=self.table.yview)
+        self.table_horizontal = ttk.Scrollbar(table_frame, orient='horizontal', command=self.table.xview)
+        self.table.configure(xscrollcommand=self.table_horizontal.set)
+        self.table.configure(yscrollcommand=self.table_scrollbar.set)
         self.table.bind('<<TreeviewSelect>>', self.focus_progress_target)
         self.table.bind('<ButtonPress-1>', lambda e: setattr(self,'drag_progress',self.table.identify_row(e.y)))
         self.table.bind('<B1-Motion>', self.drag_progress_target)
-        self.table.bind('<MouseWheel>', self.scroll_workspace)
+        self.table.bind('<Configure>', self.update_table_scrollbar, add='+')
         row = self.target_toolbar = ttk.Frame(catches, style='Inner.TFrame')
         row.pack(fill='x')
         self.target_quantity = tk.IntVar(value=1)
@@ -210,25 +255,30 @@ class App:
         ttk.Label(self.empty_results, text='Chưa có dữ liệu.', foreground=token('color.text.muted'), font=font('bodyLarge')).pack(pady=4)
         ttk.Label(self.empty_results, text='Bắt đầu để tự động ghi nhận cá đã câu.', wraplength=320, foreground=token('color.text.muted')).pack()
         self.empty_results.place(relx=.5, rely=.55, anchor='center')
-        self.session_controls=ttk.Frame(self.overview,style='Card.TFrame',padding=4)
+        self.session_controls=ttk.Frame(self.overview,style='Card.TFrame',padding=(11,10,7,10))
         self.session_controls.pack(fill='x',pady=(4,0))
         self.control_images=[asset(root,key) for key in ('button_play','button_pause','button_stop')]
-        self.start_button=ttk.Button(self.session_controls,text=' Bắt đầu',image=self.control_images[0],compound='left',command=self.start,state='disabled',style='Accent.TButton')
-        self.pause_button=ttk.Button(self.session_controls,text=' Tạm dừng',image=self.control_images[1],compound='left',command=self.pause,state='disabled')
-        self.stop_button=ttk.Button(self.session_controls,text=' Kết thúc',image=self.control_images[2],compound='left',command=self.stop,state='disabled',style='Danger.TButton')
+        self.start_button=ttk.Button(self.session_controls,text=' Bắt đầu',image=(self.control_images[0],'disabled',asset(root,'button_play_disabled')),compound='left',command=self.start,state='disabled',style='Accent.TButton')
+        self.pause_button=ttk.Button(self.session_controls,text=' Tạm dừng',image=(self.control_images[1],'disabled',asset(root,'button_pause_disabled')),compound='left',command=self.pause,state='disabled')
+        self.stop_button=ttk.Button(self.session_controls,text=' Kết thúc',image=(self.control_images[2],'disabled',asset(root,'button_stop_disabled')),compound='left',command=self.stop,state='disabled',style='Danger.TButton')
         for index,button in enumerate((self.start_button,self.pause_button,self.stop_button)):
-            self.session_controls.columnconfigure(index%2,weight=1,uniform='control')
-            button.grid(row=index//2,column=index%2,sticky='nsew',padx=3,pady=3)
+            self.session_controls.rowconfigure(index//2,minsize=66 if index<2 else 62)
+            self.session_controls.columnconfigure(index%2,weight=262 if index%2==0 else 250,uniform='control')
+            button.grid(row=index//2,column=index%2,sticky='nsew',padx=(3,5) if index%2==0 else (6,3),pady=(1,9) if index<2 else (1,2))
         clock=self.clock=ttk.Frame(self.session_controls,style='stock.TFrame',padding=(8,4))
-        clock.grid(row=1,column=1,sticky='nsew',padx=3,pady=3)
-        ttk.Label(clock,image=asset(root,'clock'),background='#EAF3FF').pack(side='left',padx=(0,6))
-        ttk.Label(clock,textvariable=self.elapsed,font=font('bodyLarge',True,True),foreground=token('color.brand.blue'),background='#EAF3FF').pack(side='left',expand=True)
+        clock.grid(row=1,column=1,sticky='nsew',padx=(6,3),pady=(1,2))
+        ttk.Label(clock,image=asset(root,'clock'),background=token('color.background.timer')).pack(side='left',padx=(0,6))
+        ttk.Label(clock,textvariable=self.elapsed,font=('Consolas',15,'bold'),foreground=token('color.brand.blue'),background=token('color.background.timer')).pack(side='left',expand=True)
         logs = ttk.Frame(self.main_column, style='Card.TFrame', padding=12)
         logs.pack(fill='both',expand=True)
-        ttk.Label(logs, text=' Hoạt động', image=asset(root, 'section_log_document'), compound='left', style='Section.TLabel').pack(anchor='w', pady=(0, 12))
-        self.status_label = ttk.Label(logs, textvariable=self.status, style='Status.TLabel', wraplength=260, padding=(8, 6))
-        self.status_label.pack(fill='x', pady=(0, 8))
-        self.log = tk.Text(logs, height=14, width=1, state='disabled', wrap='none', font=font('caption', numeric=True),
+        ttk.Label(logs, text=' Hoạt động', image=asset(root, 'section_log_document'), compound='left', style='Section.TLabel').pack(anchor='w', pady=(0, 11))
+        status_panel = ttk.Frame(logs,style='Inner.TFrame')
+        status_panel.pack(fill='x',pady=(0,8))
+        status_panel.columnconfigure(0,weight=1)
+        status_panel.rowconfigure(0,minsize=64)
+        self.status_label = ttk.Label(status_panel, textvariable=self.status, style='Status.TLabel', wraplength=340, padding=(14, 10))
+        self.status_label.grid(row=0,column=0,sticky='nsew')
+        self.log = tk.Text(logs, height=14, width=1, state='disabled', wrap='none', font=('Consolas',11),
                            bg=token('color.background.surfaceAlt'), fg=token('color.text.secondary'), relief='flat', padx=12, pady=10)
         log_scroll = ttk.Scrollbar(logs, command=self.log.yview)
         log_scroll.pack(side='right', fill='y')
@@ -251,6 +301,7 @@ class App:
 
         root.after(100, lambda: self.workspace_canvas.yview_moveto(0))
         self.poll_job = root.after(100, self.poll)
+        self.storage_job = root.after(60000, self.prune_idle_diagnostics)
 
     def resize_mode_panel(self):
         current = self.tabs.index('current')
@@ -281,14 +332,26 @@ class App:
 
     def resize_workspace(self, event=None):
         self.workspace_resize_job = None
+        if getattr(self,'_resizing_workspace',False):
+            return
+        self._resizing_workspace=True
+        try:
+            self._resize_workspace()
+        finally:
+            self._resizing_workspace=False
+
+    def _resize_workspace(self):
         canvas = self.workspace_canvas
         if hasattr(self,'table') and canvas.winfo_height()>100:
             rows=max(1,len(self.table.get_children()))
-            rowheight=min(42,max(24,(canvas.winfo_height()-160)//rows))
+            footer_height = self.mission_progress.winfo_reqheight() + 8
+            rowheight=min(60,max(20,(canvas.winfo_height()-(150 if self.mini_mode else 160)-footer_height)//rows))
             style=ttk.Style(self.root)
             if int(style.lookup('Treeview','rowheight') or 42)!=rowheight:
                 style.configure('Treeview',rowheight=rowheight)
-                self.schedule_workspace_resize()
+        # Read settled requests, including ticket wrapping and the caption;
+        # the reentrancy guard keeps Configure callbacks from nesting this work.
+        self.content.update_idletasks()
         width = canvas.winfo_width()
         height = max(canvas.winfo_height(), self.content.winfo_reqheight())
         if self.content.winfo_reqheight() > canvas.winfo_height()+2:
@@ -303,35 +366,127 @@ class App:
     def layout_changed(self, event):
         if event.widget != self.root:
             return
+        dimensions=(event.width,getattr(event,'height',self.root.winfo_height()),self.mini_mode)
+        if dimensions==getattr(self,'_layout_dimensions',None) and self.layout_mode is not None:
+            return  # Position-only Configure events during a drag need no layout.
+        self._layout_dimensions=dimensions
+        if self.mini_mode:
+            self.schedule_workspace_resize()
+            return
         scale = max(1, float(self.root.tk.call('tk', 'scaling')) / (96/72))
+        ttk.Style(self.root).configure('Nav.TButton',font=(token('typography.fontFamily'),10 if event.width < 1200 else 12,'bold'))
         wide = event.width >= 1200 * scale
-        self.header.configure(height=max(100,min(144,round(event.width*168/1536))))
+        self.header.configure(height=round(max(100,min(185,event.width*148/1534))))
         if hasattr(self,'summary_card'):
-            padding=(8,2) if self.root.winfo_height()<760 else 8
-            self.summary_card.configure(padding=padding)
+            compact=self.root.winfo_height()<760
+            padding=(8,2) if compact else 10
+            self.summary_card.configure(padding=padding if compact else (10,10,10,13))
             self.ticket_card.configure(padding=padding)
+            self.summary_card.pack_configure(pady=(0,1) if compact else (0,4))
+            self.ticket_card.pack_configure(pady=1 if compact else (11,7))
+            self.session_controls.pack_configure(pady=(1,0) if compact else (4,0))
         wide=True
         if wide == self.layout_mode:
             return
         self.layout_mode = wide
-        for i, weight in enumerate((35, 40, 25) if wide else (35, 40, 0)):
+        for i, weight in enumerate((357, 378, 266) if wide else (35, 40, 0)):
             self.content.columnconfigure(i, weight=weight, uniform='body' if weight else '', minsize=0)
         self.overview.grid(row=0,column=0,sticky='nsew',padx=(0,7))
         self.activity.grid(row=0,column=1,sticky='nsew',padx=7)
         self.main_column.grid(row=0 if wide else 1,column=2 if wide else 0,columnspan=1 if wide else 2,sticky='nsew',padx=(7,0) if wide else 0,pady=0 if wide else 14)
         self.root.after_idle(self.resize_mode_panel)
 
+    def toggle_mini(self):
+        """Reuse the live progress table; window changes never touch the worker."""
+        if not self.mini_mode:
+            for popup in (self.settings_popup, self.preparation_popup, self.mission_popup):
+                if popup is not None and popup.winfo_exists() and popup.winfo_viewable():
+                    self.root.bell()
+                    return
+            self._normal_window = (self.root.geometry(), self.root.state(), self.root.minsize(),
+                                   self.root.attributes('-topmost'))
+            self.mini_mode = True
+            self.root.state('normal')
+            self.root.title(APP_NAME + ' • Mini')
+            self.root.minsize(540, 380)
+            self.header.pack_forget()
+            self.topbar.pack_forget()
+            self.overview.grid_remove()
+            self.main_column.grid_remove()
+            self.target_toolbar.pack_forget()
+            self.restore_button.pack(side='right', padx=(8,0))
+            for i in range(3):
+                self.content.columnconfigure(i, weight=1 if i==0 else 0, uniform='')
+            self.activity.grid(row=0,column=0,sticky='nsew',padx=0)
+            width=min(620,self.root.winfo_screenwidth()-32)
+            height=min(660,self.root.winfo_screenheight()-100)
+            x=max(0,min(self.root.winfo_x(),self.root.winfo_screenwidth()-width-16))
+            y=max(0,min(self.root.winfo_y(),self.root.winfo_screenheight()-height-60))
+            self.root.geometry(f'{width}x{height}+{x}+{y}')
+            self.root.attributes('-topmost',True)
+        else:
+            geometry,state,minsize,topmost=self._normal_window
+            self.mini_mode=False
+            self.root.attributes('-topmost',topmost)
+            self.root.title(APP_NAME)
+            self.root.minsize(*minsize)
+            self.header.pack(fill='x',before=self.body)
+            self.topbar.pack(fill='x',before=self.body)
+            self.restore_button.pack_forget()
+            self.target_toolbar.pack(fill='x')
+            self.layout_mode=None
+            self.root.geometry(geometry)
+            self.root.state(state)
+            self.layout_changed(type('LayoutEvent',(),{'widget':self.root,'width':self.root.winfo_width()})())
+        self.workspace_canvas.yview_moveto(0)
+        self.titlebar.set_mini(self.mini_mode)
+        self.schedule_workspace_resize()
+
     def resize_overview(self, event):
-        columns = 2 if event.width >= 260 else 1
-        if columns == getattr(self, 'overview_columns', None):
+        scale = max(1, float(self.root.tk.call('tk','scaling')) / (96/72))
+        exact = self.root.winfo_width() >= 1400 and self.root.winfo_height() >= 950 and scale <= 1.01
+        if exact != getattr(self,'_reference_tile_heights',None):
+            self._reference_tile_heights = exact
+            for i,tile in enumerate(self.metric_tiles):
+                tile.configure(height=58 if i<2 else 57)
+                tile.pack_propagate(not exact)
+            for tile in self.stock_tiles:
+                tile.configure(height=73)
+                tile.pack_propagate(not exact)
+            for tile in self.ticket_tiles:
+                tile.configure(height=91)
+                tile.pack_propagate(not exact)
+        columns = 2 if event.width >= 380 * scale else 1
+        ticket_columns = 2 if event.width >= 420 * scale else 1
+        signature = (columns, ticket_columns, exact)
+        if signature == getattr(self, 'overview_columns', None):
             return
-        self.overview_columns = columns
+        self.overview_columns = signature
         for widgets in (self.metric_tiles, self.stock_tiles, self.ticket_tiles):
+            count = ticket_columns if widgets is self.ticket_tiles else columns
             parent = widgets[0].master
-            parent.columnconfigure(1, weight=1 if columns == 2 else 0, uniform='tile' if columns == 2 else '')
-            parent.columnconfigure(0, weight=1, uniform='tile' if columns == 2 else '')
+            parent.columnconfigure(1, weight=(259 if exact else 1) if count == 2 else 0, uniform='tile' if count == 2 else '')
+            parent.columnconfigure(0, weight=251 if exact and count==2 else 1, uniform='tile' if count == 2 else '')
             for i, widget in enumerate(widgets):
-                widget.grid(row=i//columns, column=i%columns, sticky='ew')
+                widget.grid(row=i//count, column=i%count, sticky='ew',padx=(6,4) if exact and count==2 and i%2 else 4)
+
+    def update_table_scrollbar(self, event=None):
+        if not self.table.winfo_ismapped():
+            return
+        scale = max(1, float(self.root.tk.call('tk','scaling')) / (96/72))
+        for column, width in (('#0',180), ('progress',176), ('status',160)):
+            minimum = round(width*scale)
+            if self.table.column(column,'minwidth') != minimum:
+                self.table.column(column, minwidth=minimum, width=minimum)
+        if sum(self.table.column(c,'minwidth') for c in ('#0','progress','status')) > self.table.winfo_width():
+            self.table_horizontal.pack(side='bottom', fill='x', before=self.table)
+        else:
+            self.table_horizontal.pack_forget()
+        visible = self.table.yview()
+        if visible != (0.0, 1.0) and visible[1] - visible[0] < .999:
+            self.table_scrollbar.pack(side='right', fill='y')
+        else:
+            self.table_scrollbar.pack_forget()
 
     def focus_progress_target(self, event=None):
         selected = self.table.selection()
@@ -651,10 +806,12 @@ class App:
         if self.worker.pause.is_set():
             self.worker.pause.clear()
             self.pause_button.configure(text='Tạm dừng')
+            self.refresh_progress_status('RUNNING')
         else:
             self.worker.pause.set()
             self.pause_button.configure(text='Tiếp tục')
             self.status.set('Sẽ tạm dừng sau lượt hiện tại')
+            self.refresh_progress_status('PAUSED')
 
     def stop(self):
         if self.worker:
@@ -735,6 +892,7 @@ class App:
                 self.status.set({'ERROR': 'Đã dừng do lỗi', 'COMPLETE': 'Hoàn thành nhiệm vụ',
                                  'STOPPED': 'Đã kết thúc'}.get(data, data))
                 self.timer_started = None
+                self.refresh_progress_status(data)
                 self.settings_button.configure(state='normal')
                 for widget in self.target_controls:
                     widget.configure(state='normal')
@@ -764,7 +922,7 @@ class App:
         if self.messages.empty() and pending_errors:
             self._pending_errors = []
             self.root.bell()
-            messagebox.showerror('Avatar Fishing Bot', '\n\n'.join(pending_errors))
+            messagebox.showerror(APP_NAME, '\n\n'.join(pending_errors))
         self.poll_job = self.root.after(15 if not self.messages.empty() else 75, self.poll)
 
     @staticmethod
@@ -797,36 +955,57 @@ class App:
 
     def render_progress(self, data):
         """Update stable rows without rebuilding the table or losing scroll/focus."""
+        from fishing.quest import AREAS
+        self._last_progress = dict(data)
+        self.mission_progress.set_targets(data['targets'])
+        running = data.get('status') == 'RUNNING' and not data.get('preparing')
+        if self.worker is not None and self.worker.pause.is_set():
+            running = False
+        def state(species, target=None):
+            if target and target['required'] > 0 and target['current'] >= target['required']:
+                return '✓ Đã hoàn thành', 'completed'
+            area = (target or {}).get('area') or AREAS.get(species)
+            if running and area and area == data.get('area'):
+                return '● Đang tiến hành', 'active'
+            return '○ Đang chờ', 'waiting'
         rows = []
         if data['targets']:
-            rows = [(target.get('species', target['name']),
-                     (target['name'], f"{target['current']}/{target['required']}"))
-                    for target in data['targets']]
+            for target in data['targets']:
+                species = target.get('species') or target['name']
+                label, tag = state(species, target)
+                rows.append((species, (target['name'], f"{target['current']}/{target['required']}", label), tag))
         else:
-            rows = [(species, (SPECIES.get(species, 'Chưa xác định'), count))
-                    for species, count in data['counts'].items()]
-        signature = tuple((key, tuple(str(value) for value in values)) for key, values in rows)
+            for species, count in data['counts'].items():
+                label, tag = state(species)
+                rows.append((species, (SPECIES.get(species, 'Chưa xác định'), count, label), tag))
+        signature = tuple((key, tuple(str(value) for value in values), tag) for key, values, tag in rows)
         if signature == getattr(self, '_progress_signature', None):
             return
         self._progress_signature = signature
-        desired = {key for key, _ in rows}
+        desired = {key for key, _, _ in rows}
         for key in self.table.get_children():
             if key not in desired:
                 self.table.delete(key)
-        for index, (key, values) in enumerate(rows):
+        for index, (key, values, tag) in enumerate(rows):
+            tags = (tag,'active_even') if tag=='active' and index%2==0 else (tag,)
             if self.table.exists(key):
-                if tuple(self.table.item(key, 'values')) != tuple(str(v) for v in values):
-                    self.table.item(key, values=values, text=values[0])
+                if tuple(self.table.item(key, 'values')) != tuple(str(v) for v in values) or self.table.item(key,'tags') != tags:
+                    self.table.item(key, values=values, text=values[0], tags=tags)
                 if self.table.index(key) != index:
                     self.table.move(key, '', index)
             else:
-                self.table.insert('', index, iid=key, text=values[0], image=asset(self.root, 'fish_'+key) if key in SPECIES else '', values=values)
+                self.table.insert('', index, iid=key, text=values[0], image=asset(self.root, 'fish_'+key) if key in SPECIES else '', values=values, tags=tags)
         self.table.configure(height=max(4 if not rows else 1, len(rows)))
         if rows:
             self.empty_results.place_forget()
         else:
             self.empty_results.place(relx=.5, rely=.55, anchor='center')
         self.schedule_workspace_resize()
+
+    def refresh_progress_status(self, status):
+        data=getattr(self,'_last_progress',None)
+        if data is not None:
+            self.render_progress({**data,'status':status})
 
     def open_logs(self):
         try:
@@ -835,6 +1014,14 @@ class App:
             os.startfile(folder)
         except OSError as exc:
             messagebox.showerror('Không mở được thư mục log', str(exc))
+
+    def prune_idle_diagnostics(self):
+        # Active workers already prune from their own write thread. Avoid a
+        # competing GUI-thread reader of runtime files during atomic writes.
+        if self.worker is None:
+            from debug.retention import maybe_prune
+            maybe_prune(ROOT/'debug')
+        self.storage_job = self.root.after(60000,self.prune_idle_diagnostics)
 
     def dispose(self, event):
         if event.widget == self.root:
@@ -871,7 +1058,7 @@ if __name__ == '__main__':
         root.update_idletasks()
         root.update()
         (ROOT / 'gui-ui-check.json').write_text(json.dumps({
-            'tk': tk.TkVersion, 'assets_loaded': len(root._ui_assets),
+            'version': APP_VERSION, 'tk': tk.TkVersion, 'assets_loaded': len(root._ui_assets),
             'mode_tabs': len(app.tabs.tabs()), 'worker_started': app.worker is not None,
             'root': str(ROOT)}, indent=2), encoding='utf-8')
         root.destroy()
@@ -882,7 +1069,7 @@ if __name__ == '__main__':
         app = App(root)
         from fishing.dock import DockDetector
         (ROOT / 'gui-smoke-test.json').write_text(json.dumps({
-            'tk': tk.TkVersion, 'start_disabled': str(app.start_button['state']) == 'disabled',
+            'version': APP_VERSION, 'tk': tk.TkVersion, 'start_disabled': str(app.start_button['state']) == 'disabled',
             'dock_templates': len(DockDetector().templates),
             'ocr_script': (ROOT / 'vision/windows_ocr.ps1').is_file(),
             'root': str(ROOT)}, indent=2), encoding='utf-8')
@@ -900,7 +1087,7 @@ if __name__ == '__main__':
     except OSError:
         root = tk.Tk()
         root.withdraw()
-        messagebox.showinfo('Avatar Fishing Bot', 'Giao diện đang mở. Chỉ chạy một bot để tránh thao tác trùng.')
+        messagebox.showinfo(APP_NAME, 'Giao diện đang mở. Chỉ chạy một bot để tránh thao tác trùng.')
         root.destroy()
     else:
         from debug.retention import maybe_prune

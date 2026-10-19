@@ -1,1 +1,0 @@
-SessionResult(status='COMPLETE', reason='Đã kết thúc 1 lượt; màn hình sẵn sàng Quăng câu', rounds=(TrialResult(outcome='SUCCESS', reason='Đã thấy popup nhận cá', casts=1, drags=6, confirmed=4, fish_species='cua', fish_name='Cua', fish_confidence=1.0, area='ca_noc', bite_observed=True),))

@@ -1,3 +1,0 @@
-{"event": "TAP", "image": "000_TAP.png", "action": "Mở bảng chọn khu", "point": [103, 442]}
-{"event": "TAP", "image": "001_TAP.png", "action": "Đổi sang khu 10", "point": [873, 585]}
-{"event": "ROOM_CHANGED", "image": "002_ROOM_CHANGED.png", "room": 10}

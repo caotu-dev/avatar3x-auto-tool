@@ -58,6 +58,24 @@ def find_template(screen: NDArray[np.uint8], template: NDArray[np.uint8],
     # Tiny repeated anchors need OpenCV's original global tie-breaking:
     # different FFT strip sizes can choose a different identical room sign.
     strip_rows = region.shape[0] if height <= 20 and width <= 64 else RESPONSE_ROWS
+    try:
+        confidence,location = _match_strips(region,template,method,contrast_invariant,strip_rows)
+    except (cv2.error, MemoryError) as error:
+        if isinstance(error,cv2.error) and error.code != -4:
+            raise
+        # Preserve normal scores/tie-breaking. Only allocation failure retries
+        # with a smaller working set; never replay a game input here.
+        if strip_rows <= 64:
+            raise
+        confidence,location = _match_strips(region,template,method,contrast_invariant,64)
+    if not np.isfinite(confidence) or confidence < threshold:
+        return None
+    return MatchResult(x1 + location[0], y1 + location[1], width, height, confidence)
+
+
+def _match_strips(region, template, method, contrast_invariant, strip_rows):
+    height=template.shape[0]
+    confidence,location=-float('inf'),(0,0)
     for top in range(0,region.shape[0]-height+1,strip_rows):
         bottom = min(region.shape[0],top+strip_rows+height-1)
         scores = cv2.matchTemplate(region[top:bottom],template,method)
@@ -67,6 +85,4 @@ def find_template(screen: NDArray[np.uint8], template: NDArray[np.uint8],
         if np.isfinite(score) and score > confidence:
             confidence,location = score,(point[0],point[1]+top)
         del scores
-    if not np.isfinite(confidence) or confidence < threshold:
-        return None
-    return MatchResult(x1 + location[0], y1 + location[1], width, height, confidence)
+    return confidence,location

@@ -80,6 +80,14 @@ class ControlledDevice:
         self.continue_screen = ContinueScreen()
         self.guard_session = True
 
+    def wait_connected(self, timeout=30):
+        if not isinstance(self.device, AdbDevice):
+            return self.is_connected()
+        def checkpoint():
+            if self.stop.is_set():
+                raise Cancelled()
+        return self.device.wait_connected(timeout=timeout, checkpoint=checkpoint)
+
     def __getattr__(self, name):
         member = getattr(self.device, name)
         if not callable(member):
@@ -108,7 +116,7 @@ class BotWorker:
         self.pause = threading.Event()
         settings = Settings()
         self.device = ControlledDevice(device or AdbDevice(settings.serial, settings.adb_path,fast_capture=True), self.stop,
-            lambda retry, limit: self.emit('log', f'[ADB] Chụp màn hình quá thời gian; đang thử lại {retry}/{limit}.'))
+            lambda retry, limit: self.emit('log', f'[ADB] Kết nối/chụp màn hình gián đoạn; đang thử lại {retry}/{limit}.'))
         self.folder = ROOT / 'debug/ui' / datetime.now().strftime('%Y-%m-%d_%H-%M-%S_%f')
         self.folder.mkdir(parents=True, exist_ok=True)
         self.data = {'status': 'NEW', 'counts': {}, 'unsold': {}, 'casts': 0, 'bites': 0,
@@ -180,8 +188,18 @@ class BotWorker:
         return ('tickets','bait_remaining','bait_stocks','bait_estimated','wallet',
                 'scan_complete','inventory_observed_at','inventory_updated_at')
 
+    @staticmethod
+    def resource_error(reason):
+        return any(marker in str(reason).lower() for marker in (
+            'insufficient memory', 'not enough memory', 'paging file',
+            'outofmemoryerror', 'failed to allocate', 'winerror 8]', 'winerror 1455]'))
+
     def explain_error(self, reason):
         """Đọc popup lỗi khi luồng cũ chưa nhận diện, không bấm popup lạ."""
+        # A transport failure is not a game popup. Another screenshot here
+        # used to add 45 seconds of retries before recovery could even start.
+        if 'adb' in reason.lower() or self.resource_error(reason):
+            return reason
         from fishing.quest import read_ocr, normalize
         import cv2
         path = self.folder / 'error_screen.png'
@@ -490,7 +508,10 @@ class BotWorker:
     def record(self, result):
         self.refresh_chest_date()
         self.data['casts'] += result.casts
-        self.data['bites'] += int(result.bite_observed)
+        # The dashboard counts fish actually received, not the earlier bite
+        # signal. Xong/RESULT alone (or a failed pull after a bite) is a miss.
+        caught = result.outcome == 'SUCCESS' and result.fish_species in SPECIES
+        self.data['bites'] += int(caught)
         self.data['misses']=max(0,self.data['casts']-self.data['bites'])
         if result.area=='dock':
             stock=self.data['bait_stocks']['dock']
@@ -501,7 +522,7 @@ class BotWorker:
         if result.casts:
             self.data.setdefault('bait_estimated',{})['dock' if result.area=='dock' else 'ecological']=True
         if result.outcome == 'FAILED':
-            pass  # Misses are derived from casts minus bites in publish().
+            pass  # Misses are casts minus confirmed named catches.
         elif result.outcome in ('RESULT','ABORTED'):
             self.data['unclassified_results'] += 1
         elif result.outcome == 'SUCCESS':
@@ -545,17 +566,32 @@ class BotWorker:
             self.emit('log',f'[KHÔI PHỤC] Lần {count}/{self.options.resume_limit}: {error}')
             self.preparation_step('Đang về bản đồ thế giới để tiếp tục tiến trình…')
             self.publish()
+            self.ready_for_next = None
             try:
                 # A lost purchase receipt cannot be reconstructed by retrying payment.
                 if self.data['purchase_pending']:
                     raise RuntimeError('Giao dịch chưa có biên nhận; không tự chạy lại để tránh mua lặp.')
+                if self.resource_error(error):
+                    # Drop optional solver workspaces and allow Windows/emulator
+                    # resources to settle instead of burning all retries at once.
+                    import gc
+                    self.fishing_presentations.clear()
+                    if isinstance(self.device.device, AdbDevice):
+                        self.device.device.fast_capture = False
+                    gc.collect()
+                    self.emit('log', '[KHÔI PHỤC] Thiếu bộ nhớ hệ thống; đã giải phóng cache và chờ 5 giây.')
+                    self.stop.wait(5)
                 self.checkpoint()
-                if not self.device.is_connected():
+                self.emit('log', '[KHÔI PHỤC] Đang chờ kết nối giả lập ổn định (tối đa 30 giây)…')
+                if not self.device.wait_connected(timeout=30):
                     raise RuntimeError('ADB chưa kết nối khi khôi phục')
                 try:
+                    self.travel.wait(lambda image:True,'màn hình khôi phục sau popup',timeout=10,observations=1)
                     image=self.device.screenshot()
                 except SessionLost:
-                    self.reconnect();image=self.device.screenshot()
+                    self.reconnect()
+                    self.travel.wait(lambda image:True,'màn hình sau kết nối lại',timeout=10,observations=1)
+                    image=self.device.screenshot()
                 detector=FishingDetector(area=self.data.get('area','ca_ro'))
                 navigator=MapNavigator(self.device,output=self.folder/f'restart_{count:02d}')
                 from fishing.states import FishingState
@@ -576,7 +612,8 @@ class BotWorker:
                                 or self.travel.world.map_name(image,require_menu=False) is not None):
                             return 'outside'
                         return None
-                    response=self.travel.wait(cancellation_screen,'hủy lượt hoặc map ngoài ghế',timeout=10)
+                    response=self.travel.wait(cancellation_screen,'hủy lượt hoặc map ngoài ghế',timeout=10,
+                                              handle_interruptions=False)
                     if response=='confirm':
                         self.travel.button('exit_yes','Có: hủy lượt để khôi phục')
                 # Close unknown overlays via Android Back, inspecting each
@@ -620,6 +657,9 @@ class BotWorker:
             except Exception as failure:
                 error=failure
                 self.emit('log','[KHÔI PHỤC] Chưa thành công: '+str(failure))
+                if self.resource_error(failure):
+                    self.emit('log','[KHÔI PHỤC] Vẫn thiếu bộ nhớ sau khi giải phóng cache; dừng để tránh lặp thao tác khôi phục. Đóng bớt ứng dụng rồi chạy lại.')
+                    break
                 repeated_failures = repeated_failures + 1 if str(failure) == previous_failure else 1
                 previous_failure = str(failure)
                 if repeated_failures >= 3:
@@ -695,7 +735,9 @@ class BotWorker:
                         ready_handoff=self.take_ready_handoff(area)
                         if ready_handoff is None:
                             self.go(area)
-                        self.data['area'] = area
+                        if self.data.get('area') != area or self.data['status'] != 'RUNNING':
+                            self.data.update(area=area,status='RUNNING')
+                            self.publish()
                         self.sell_before_midnight(area)
                         index += 1
                         if area not in self.fishing_presentations:

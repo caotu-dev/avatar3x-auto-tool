@@ -21,10 +21,43 @@ foreach ($taskFile in $taskFiles) {
     if ($taskFile -match '^(runtime|debug)[\\/]') { throw 'Package không được ghi đè dữ liệu runtime/debug' }
     $taskDestination = Join-Path $taskRelease $taskFile
     New-Item -ItemType Directory -Path (Split-Path $taskDestination) -Force | Out-Null
-    Copy-Item -LiteralPath (Join-Path $taskStage $taskFile) -Destination $taskDestination -Force
+    # Reuse identical bundled libraries. Windows/scanners may still hold a DLL
+    # open after a diagnostic run; overwriting an unchanged binary is needless.
+    $taskSource = Join-Path $taskStage $taskFile
+    if (Test-Path -LiteralPath $taskDestination -PathType Leaf) {
+        if ((Get-Item -LiteralPath $taskSource).Length -eq (Get-Item -LiteralPath $taskDestination).Length -and
+            (Get-FileHash -LiteralPath $taskSource -Algorithm SHA256).Hash -eq (Get-FileHash -LiteralPath $taskDestination -Algorithm SHA256).Hash) { continue }
+    }
+    Copy-Item -LiteralPath $taskSource -Destination $taskDestination -Force
 }
 ConvertTo-Json -InputObject $taskFiles | Set-Content -LiteralPath $taskManifest -Encoding utf8
-Write-Host 'Mở dist\AvatarFishingBot\AvatarFishingBot.exe. Giữ nguyên cả thư mục. runtime/debug được giữ khi build lại.'
+# The package directory stays stable so existing runtime/settings are reused.
+$taskExe = Join-Path $taskRelease 'Avatools 3x.exe'
+$taskShortcut = Join-Path $PSScriptRoot 'Avatools 3x.lnk'
+$taskShell = New-Object -ComObject WScript.Shell
+$taskLink = $taskShell.CreateShortcut($taskShortcut)
+$taskLink.TargetPath = $taskExe
+$taskLink.WorkingDirectory = $taskRelease
+$taskLink.IconLocation = "$taskExe,0"
+$taskLink.Description = 'Avatools 3x'
+$taskLink.Save()
+# Refresh only the changed app/shortcut entries, keeping Explorer running.
+Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+namespace AvatoolsBuild {
+    public static class ShellIcons {
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+        public static extern void SHChangeNotify(int change, uint flags, string path, IntPtr unused);
+    }
+}
+'@
+foreach ($taskChangedIcon in @($taskExe, $taskShortcut, (Join-Path $taskRelease 'ui/assets/avatools.ico'))) {
+    [AvatoolsBuild.ShellIcons]::SHChangeNotify(0x2000, 0x0005, $taskChangedIcon, [IntPtr]::Zero)
+}
+$taskOldShortcut = Join-Path $PSScriptRoot 'Avatar Fishing Bot.lnk'
+if (Test-Path -LiteralPath $taskOldShortcut) { Remove-Item -LiteralPath $taskOldShortcut -Force }
+Write-Host 'Mở Avatools 3x.lnk hoặc dist\AvatarFishingBot\Avatools 3x.exe. Giữ nguyên cả thư mục. runtime/debug được giữ khi build lại.'
 $taskBuildRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot 'build'))
 if ($taskBuildRoot -ne ([IO.Path]::GetFullPath($PSScriptRoot) + '\build')) { throw 'Build cleanup path mismatch' }
 Remove-Item -LiteralPath $taskBuildRoot -Recurse -Force

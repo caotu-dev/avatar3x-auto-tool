@@ -4,6 +4,42 @@ import cv2
 import numpy as np
 from numpy.typing import NDArray
 
+AUTOMATIC_FOLDERS = frozenset(('ui','runs','trials','navigation','dock','tours','missions'))
+
+
+def _automatic_destination(path):
+    from config.settings import ROOT
+    try:
+        relative = Path(path).resolve().relative_to((ROOT/'debug').resolve())
+    except ValueError:
+        return False
+    return bool(relative.parts and relative.parts[0] in AUTOMATIC_FOLDERS)
+
+
+def save_event_screenshot(image, path, event, details=None):
+    """Normal automation keeps text events; capture faults/payment evidence only.
+
+    Detection still uses the original in-memory image. Explicit manual exports
+    and recording outside automatic folders retain their existing behavior.
+    """
+    details = details or {}
+    event = event.upper()
+    capture = (
+        any(marker in event for marker in ('ERROR','TIMEOUT','UNKNOWN','RETRY'))
+        or event in ('WAIT_RESULT','RECOVER_RESULT','EXIT_CONFIRM','SALE_CONFIRMED',
+                     'INVENTORY_TICKET','INVENTORY_BAIT','RECONNECT_COOLDOWN','OUT_OF_BAIT')
+        or event.startswith('CANCEL_EXIT')
+        or ('PURCHASE' in event and 'SKIPPED' not in event)
+        or (event == 'STOP' and str(details.get('outcome',details.get('status',''))).upper()
+            not in ('SUCCESS','COMPLETE','FAILED','OUT_OF_BAIT'))
+    )
+    if _automatic_destination(path) and not capture:
+        from config.settings import ROOT
+        from debug.retention import maybe_prune
+        maybe_prune(ROOT/'debug')
+        return None
+    return save_debug_screenshot(image,path)
+
 def decode_raw_screenshot(data: bytes) -> NDArray[np.uint8]:
     import struct
     if len(data)<12:raise ValueError('Ảnh ADB thô thiếu header')
@@ -32,7 +68,7 @@ def save_debug_screenshot(image: NDArray[np.uint8], path: str | Path) -> Path:
         relative=destination.resolve().relative_to((ROOT/'debug').resolve())
     except ValueError:
         relative=None
-    if relative is not None and relative.parts and relative.parts[0] in ('ui','runs','trials','navigation','dock','tours','missions'):
+    if relative is not None and relative.parts and relative.parts[0] in AUTOMATIC_FOLDERS:
         # Three recent compressed frames per diagnostic folder, never inputs
         # used by OCR/template matching. Manual screenshot exports remain PNG.
         prefix=destination.stem.split('_')[0]
@@ -44,7 +80,7 @@ def save_debug_screenshot(image: NDArray[np.uint8], path: str | Path) -> Path:
     if not success:
         raise ValueError("Không mã hóa được ảnh PNG")
     destination.write_bytes(encoded.tobytes())
-    if relative is not None and relative.parts and relative.parts[0] in ('ui','runs','trials','navigation','dock','tours','missions'):
+    if relative is not None and relative.parts and relative.parts[0] in AUTOMATIC_FOLDERS:
         from debug.retention import maybe_prune
         maybe_prune(ROOT/'debug', protected_paths=(destination,))
     return destination

@@ -1,7 +1,0 @@
-{"event": "TAP", "image": "000_TAP.png", "action": "MENU → rương đồ", "point": [96, 50]}
-{"event": "TAP", "image": "001_TAP.png", "action": "Mở rương đồ", "point": [99, 471]}
-{"event": "TAP", "image": "002_TAP.png", "action": "Đọc thông tin item trong rương", "point": [522, 695]}
-{"event": "INVENTORY_TICKET", "image": "003_INVENTORY_TICKET.png", "ticket": "ca_ro", "status": "active", "expires_on": "2026-10-18"}
-{"event": "TAP", "image": "004_TAP.png", "action": "Đọc thông tin item trong rương", "point": [794, 695]}
-{"event": "INVENTORY_TICKET", "image": "005_INVENTORY_TICKET.png", "ticket": "ca_noc", "status": "active", "expires_on": "2026-10-21"}
-{"event": "TAP", "image": "006_TAP.png", "action": "Đóng rương đồ", "point": [1510, 35]}

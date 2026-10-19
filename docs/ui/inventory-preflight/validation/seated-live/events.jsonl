@@ -1,3 +1,0 @@
-{"event": "PREPARE_EXIT_CONFIRM", "elapsed": 0.813, "after_round": 0, "image": "000_PREPARE_EXIT_CONFIRM.png"}
-{"event": "CANCEL_EXIT", "elapsed": 1.735, "after_round": 0, "image": "001_CANCEL_EXIT.png", "point": [958, 557]}
-{"event": "PREPARE_READY", "elapsed": 2.922, "after_round": 0, "image": "002_PREPARE_READY.png"}

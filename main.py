@@ -2,6 +2,9 @@ import argparse
 import math
 import sys
 
+from config.native_runtime import configure_native_runtime
+configure_native_runtime()
+
 from adb import AdbDevice, AdbError
 from adb.screenshot import save_debug_screenshot
 from config.settings import Settings, TrialSettings, SessionSettings
